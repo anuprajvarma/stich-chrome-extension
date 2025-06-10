@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "version": "1.0",
+  "name": "Stich",
+  "description": "Stop switching tabs to chat with AI; use AI on any site instantly. Write emails & messages, fix grammar mistakes, rephrase text, change writing tone, summarize text, and much more using ChatGPT AI. Works on all sites. Free to use.",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": ["scripting"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "icons": {
+    "128": "icon.png"
+  }
+}
