@@ -84,7 +84,9 @@ body {
 }
 
 .search-div {
+  align-items: end;
   display: flex;
+  justify-content: space-between;
   gap: 10px;
   width: 100%;
 }
