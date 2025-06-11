@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RiPlayListAddLine } from "react-icons/ri";
 import { MdOutlineSend } from "react-icons/md";
 import ReactMarkdown from "react-markdown";
@@ -6,12 +6,15 @@ import { MdOutlineDeleteOutline } from "react-icons/md";
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 import "./App.css";
 
+const length = "";
+const tone = "";
+
 function App() {
+  const selectRef = useRef<HTMLSelectElement>(null);
   const [selectedText, setSelectedText] = useState("");
   const [question, setQuestion] = useState("");
   const [contextExists, setContextExists] = useState(false);
-  // const [copiedText, setCopiedText] = useState("");
-  // const [loading, setLoading] = useState(false);
+  const [isTypeExist, setIsTypeExist] = useState(false);
   const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
     []
   );
@@ -19,13 +22,12 @@ function App() {
     window.close();
   };
 
-  // useEffect(() => {
-  //   chrome.storage.local.get("copiedText", (data) => {
-  //     if (data.copiedText) {
-  //       setCopiedText(data.copiedText);
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    if (selectRef.current) {
+      selectRef.current.focus();
+      selectRef.current.click();
+    }
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -46,6 +48,10 @@ function App() {
 
   const handleContext = () => {
     setContextExists(!contextExists);
+  };
+
+  const handleType = () => {
+    setIsTypeExist(!isTypeExist);
   };
 
   const handleChat = async () => {
@@ -70,6 +76,10 @@ function App() {
           stream: true,
           messages: [
             {
+              role: "system",
+              content: `You are a helpful assistant. Respond in a ${length} formatwith a ${tone} tone.`,
+            },
+            {
               role: "user",
               content: `${selectedText} ${question}`,
             },
@@ -83,7 +93,6 @@ function App() {
       const decoder = new TextDecoder("utf-8");
       let botReply = "";
 
-      // Initial empty message to append as stream updates
       setMessages((prev) => [...prev, { sender: "bot", text: "" }]);
 
       while (true) {
@@ -92,7 +101,6 @@ function App() {
 
         const chunk = decoder.decode(value, { stream: true });
 
-        // Split SSE stream into individual events
         const lines = chunk
           .split("\n")
           .filter((line) => line.trim().startsWith("data:"));
@@ -102,18 +110,22 @@ function App() {
         for (const line of lines) {
           const jsonStr = line.replace(/^data:\s*/, "");
 
-          // Handle "[DONE]"
           if (jsonStr === "[DONE]") {
             return;
           }
 
           try {
+            let delta = "";
             const parsed = JSON.parse(jsonStr);
-            const delta = parsed.choices?.[0]?.delta?.content;
+            if (isTypeExist) {
+              delta = parsed.choices?.[0]?.delta?.reasoning;
+            } else {
+              delta = parsed.choices?.[0]?.delta?.content;
+            }
+
+            console.log("Parsed chunk:", parsed);
             if (delta) {
               botReply += delta;
-
-              // Update last message in-place
               setMessages((prev) => {
                 const updated = [...prev];
                 const lastIndex = updated.length - 1;
@@ -121,9 +133,6 @@ function App() {
                 return updated;
               });
             }
-            // if (!res.body) {
-            // console.log("Response status:", res.body);
-            // }
           } catch (err) {
             console.error("Error parsing chunk:", err);
           }
@@ -187,8 +196,17 @@ function App() {
             onKeyDown={(e) => handleKeyDown(e)}
           ></textarea>
           <div className="search-div">
-            <div>
-              <button>Type +</button>
+            <div className="type">
+              {isTypeExist ? (
+                <div>
+                  <select ref={selectRef}>
+                    <option value="short">reasoning</option>
+                  </select>
+                  <button onClick={handleType}>X</button>
+                </div>
+              ) : (
+                <button onClick={handleType}>Type +</button>
+              )}
               <button>Change tone +</button>
               <button>Length +</button>
             </div>

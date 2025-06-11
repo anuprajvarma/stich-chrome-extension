@@ -91,3 +91,8 @@ body {
   gap: 10px;
   width: 100%;
 }
+
+.type {
+  display: flex;
+  gap: 10px;
+}
