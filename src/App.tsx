@@ -1,20 +1,21 @@
 import { useEffect, useRef, useState } from "react";
-import { RiPlayListAddLine } from "react-icons/ri";
+// import { RiPlayListAddLine } from "react-icons/ri";
 import { MdOutlineSend } from "react-icons/md";
 import ReactMarkdown from "react-markdown";
-import { MdOutlineDeleteOutline } from "react-icons/md";
+// import { MdOutlineDeleteOutline } from "react-icons/md";
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 import "./App.css";
-
-const length = "";
-const tone = "";
 
 function App() {
   const selectRef = useRef<HTMLSelectElement>(null);
   const [selectedText, setSelectedText] = useState("");
+  const [selectedLength, setSelectedLength] = useState("");
+  const [selectedTone, setSelectedTone] = useState("");
   const [question, setQuestion] = useState("");
-  const [contextExists, setContextExists] = useState(false);
+  // const [contextExists, setContextExists] = useState(false);
   const [isTypeExist, setIsTypeExist] = useState(false);
+  const [isLengthExist, setIsLengthExist] = useState(false);
+  const [isToneExist, setIsToneExist] = useState(false);
   const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
     []
   );
@@ -34,7 +35,7 @@ function App() {
     const text = params.get("text");
     if (text) {
       setSelectedText(text);
-      setContextExists(true);
+      // setContextExists(true);
       console.log("Received selected text:", text);
     }
   }, []);
@@ -46,12 +47,32 @@ function App() {
     }
   };
 
-  const handleContext = () => {
-    setContextExists(!contextExists);
+  const handleLength = () => {
+    setIsLengthExist(!isLengthExist);
+    setSelectedLength("short");
+  };
+
+  // const handleContext = () => {
+  //   setContextExists(!contextExists);
+  // };
+
+  const handleTone = () => {
+    setIsToneExist(!isToneExist);
+    setSelectedTone("profesional");
   };
 
   const handleType = () => {
     setIsTypeExist(!isTypeExist);
+  };
+
+  const handleLegthOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedLength(e.target.value);
+    console.log("Selected:", e.target.value);
+  };
+
+  const handleToneOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedTone(e.target.value);
+    console.log("Selected tone:", e.target.value);
   };
 
   const handleChat = async () => {
@@ -65,6 +86,7 @@ function App() {
     setQuestion("");
 
     try {
+      console.log(`tone ${selectedTone} length ${selectedLength}`);
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -77,7 +99,7 @@ function App() {
           messages: [
             {
               role: "system",
-              content: `You are a helpful assistant. Respond in a ${length} formatwith a ${tone} tone.`,
+              content: `You are a helpful assistant. Respond in a ${selectedLength} formatwith a ${selectedTone} tone.`,
             },
             {
               role: "user",
@@ -157,7 +179,7 @@ function App() {
             X
           </button>
         </div>
-        <div>
+        {/* <div>
           {contextExists ? (
             <div>
               <input value={selectedText} />
@@ -171,7 +193,7 @@ function App() {
               <p>Add Context</p>
             </button>
           )}
-        </div>
+        </div> */}
         <div className="text-area-div">
           {messages.map((msg, index) => (
             <div
@@ -200,15 +222,39 @@ function App() {
               {isTypeExist ? (
                 <div>
                   <select ref={selectRef}>
-                    <option value="short">reasoning</option>
+                    <option value="reasoning">reasoning</option>
                   </select>
                   <button onClick={handleType}>X</button>
                 </div>
               ) : (
                 <button onClick={handleType}>Type +</button>
               )}
-              <button>Change tone +</button>
-              <button>Length +</button>
+              {isToneExist ? (
+                <div>
+                  <select value={selectedTone} onChange={handleToneOption}>
+                    <option value="profesional">profesional</option>
+                    <option value="casual">casual</option>
+                    <option value="straightforward">straightforward</option>
+                    <option value="confident">confident</option>
+                    <option value="friendly">friendly</option>
+                  </select>
+                  <button onClick={handleTone}>X</button>
+                </div>
+              ) : (
+                <button onClick={handleTone}>Change tone +</button>
+              )}
+              {isLengthExist ? (
+                <div>
+                  <select value={selectedLength} onChange={handleLegthOption}>
+                    <option value="short">Short</option>
+                    <option value="medium">Medium</option>
+                    <option value="long">Long</option>
+                  </select>
+                  <button onClick={handleLength}>X</button>
+                </div>
+              ) : (
+                <button onClick={handleLength}>Length +</button>
+              )}
             </div>
             <div className="">
               <button onClick={handleChat}>
