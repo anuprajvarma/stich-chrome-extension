@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { MdOutlineSend } from "react-icons/md";
 import ReactMarkdown from "react-markdown";
 // import { MdOutlineDeleteOutline } from "react-icons/md";
-import { LuFishSymbol } from "react-icons/lu";
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 import "./App.css";
 
@@ -171,10 +170,10 @@ function App() {
       <div className="top-div">
         <div className="header">
           <div className="stich">
+            <div>
+              <img src="icon.png" width={30} height={30} />
+            </div>
             <p className="stich-title">Stich</p>
-
-            <LuFishSymbol className="stich-icon" />
-            {/* <img src="icon.png" width={30} height={30} /> */}
           </div>
           <button className="close-btn" onClick={onclose}>
             X
