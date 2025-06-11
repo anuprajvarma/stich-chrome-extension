@@ -8,7 +8,7 @@ import "./App.css";
 
 function App() {
   const selectRef = useRef<HTMLSelectElement>(null);
-  const [selectedText, setSelectedText] = useState("");
+  // const [selectedText, setSelectedText] = useState("");
   const [selectedLength, setSelectedLength] = useState("");
   const [selectedTone, setSelectedTone] = useState("");
   const [question, setQuestion] = useState("");
@@ -30,15 +30,15 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const text = params.get("text");
-    if (text) {
-      setSelectedText(text);
-      // setContextExists(true);
-      console.log("Received selected text:", text);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const params = new URLSearchParams(window.location.search);
+  //   const text = params.get("text");
+  //   if (text) {
+  //     setSelectedText(text);
+  //     // setContextExists(true);
+  //     console.log("Received selected text:", text);
+  //   }
+  // }, []);
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -103,7 +103,7 @@ function App() {
             },
             {
               role: "user",
-              content: `${selectedText} ${question}`,
+              content: `${question}`,
             },
           ],
         }),
