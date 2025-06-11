@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RiPlayListAddLine } from "react-icons/ri";
 import { MdOutlineSend } from "react-icons/md";
 import ReactMarkdown from "react-markdown";
@@ -7,6 +7,7 @@ const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 import "./App.css";
 
 function App() {
+  const [selectedText, setSelectedText] = useState("");
   const [question, setQuestion] = useState("");
   const [contextExists, setContextExists] = useState(false);
   // const [copiedText, setCopiedText] = useState("");
@@ -25,6 +26,16 @@ function App() {
   //     }
   //   });
   // }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const text = params.get("text");
+    if (text) {
+      setSelectedText(text);
+      setContextExists(true);
+      console.log("Received selected text:", text);
+    }
+  }, []);
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -60,7 +71,7 @@ function App() {
           messages: [
             {
               role: "user",
-              content: question,
+              content: `${selectedText} ${question}`,
             },
           ],
         }),
@@ -140,7 +151,7 @@ function App() {
         <div>
           {contextExists ? (
             <div>
-              <input />
+              <input value={selectedText} />
               <button onClick={handleContext}>
                 <MdOutlineDeleteOutline />
               </button>
