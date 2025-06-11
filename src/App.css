@@ -21,11 +21,20 @@ body {
 
 .stich {
   display: flex;
+  gap: 4px;
   align-items: center;
 }
 
-.stich img {
-  margin-right: 10px;
+.stich-title {
+  font-size: larger;
+  font-weight: bold;
+}
+
+.stich-icon {
+  width: 25px;
+  height: 25px;
+  color: #4a90e2;
+  font-weight: bold;
 }
 
 .stich h1 {
