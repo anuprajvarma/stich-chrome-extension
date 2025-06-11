@@ -2,11 +2,15 @@ import { useState } from "react";
 import { RiPlayListAddLine } from "react-icons/ri";
 import { MdOutlineSend } from "react-icons/md";
 import ReactMarkdown from "react-markdown";
+import { MdOutlineDeleteOutline } from "react-icons/md";
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 import "./App.css";
 
 function App() {
   const [question, setQuestion] = useState("");
+  const [contextExists, setContextExists] = useState(false);
+  // const [copiedText, setCopiedText] = useState("");
+  // const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
     []
   );
@@ -14,54 +18,26 @@ function App() {
     window.close();
   };
 
+  // useEffect(() => {
+  //   chrome.storage.local.get("copiedText", (data) => {
+  //     if (data.copiedText) {
+  //       setCopiedText(data.copiedText);
+  //     }
+  //   });
+  // }, []);
+
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      console.log(apiKey);
-      if (question.trim() === "") {
-        console.log("Please enter a question.");
-        return;
-      }
-
-      const userMsg = { sender: "user", text: question };
-      setMessages((prev) => [...prev, userMsg]);
-      try {
-        const res = await fetch(
-          "https://openrouter.ai/api/v1/chat/completions",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${apiKey}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              model: "deepseek/deepseek-r1:free",
-              messages: [
-                {
-                  role: "user",
-                  content: question,
-                },
-              ],
-            }),
-          }
-        );
-
-        const data = await res.json();
-        console.log("Response from OpenRouter:", data);
-        console.log("Response text:", data.choices[0].message.content);
-        setMessages((prev) => [
-          ...prev,
-          { sender: "bot", text: data.choices[0].message.content },
-        ]);
-      } catch (error) {
-        console.error("Error fetching from OpenRouter or saving to DB:", error);
-      }
-      setQuestion("");
+      handleChat();
     }
   };
 
+  const handleContext = () => {
+    setContextExists(!contextExists);
+  };
+
   const handleChat = async () => {
-    console.log(apiKey);
     if (question.trim() === "") {
       console.log("Please enter a question.");
       return;
@@ -69,6 +45,8 @@ function App() {
 
     const userMsg = { sender: "user", text: question };
     setMessages((prev) => [...prev, userMsg]);
+    setQuestion("");
+
     try {
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
@@ -78,6 +56,7 @@ function App() {
         },
         body: JSON.stringify({
           model: "deepseek/deepseek-r1:free",
+          stream: true,
           messages: [
             {
               role: "user",
@@ -87,17 +66,61 @@ function App() {
         }),
       });
 
-      const data = await res.json();
-      console.log("Response from OpenRouter:", data);
-      console.log("Response text:", data.choices[0].message.content);
-      setMessages((prev) => [
-        ...prev,
-        { sender: "bot", text: data.choices[0].message.content },
-      ]);
+      if (!res.body) throw new Error("No response body");
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let botReply = "";
+
+      // Initial empty message to append as stream updates
+      setMessages((prev) => [...prev, { sender: "bot", text: "" }]);
+
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+
+        // Split SSE stream into individual events
+        const lines = chunk
+          .split("\n")
+          .filter((line) => line.trim().startsWith("data:"));
+
+        console.log("Stream completed");
+
+        for (const line of lines) {
+          const jsonStr = line.replace(/^data:\s*/, "");
+
+          // Handle "[DONE]"
+          if (jsonStr === "[DONE]") {
+            return;
+          }
+
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const delta = parsed.choices?.[0]?.delta?.content;
+            if (delta) {
+              botReply += delta;
+
+              // Update last message in-place
+              setMessages((prev) => {
+                const updated = [...prev];
+                const lastIndex = updated.length - 1;
+                updated[lastIndex] = { ...updated[lastIndex], text: botReply };
+                return updated;
+              });
+            }
+            // if (!res.body) {
+            // console.log("Response status:", res.body);
+            // }
+          } catch (err) {
+            console.error("Error parsing chunk:", err);
+          }
+        }
+      }
     } catch (error) {
-      console.error("Error fetching from OpenRouter or saving to DB:", error);
+      console.error("Streaming error:", error);
     }
-    setQuestion("");
   };
 
   return (
@@ -115,10 +138,19 @@ function App() {
           </button>
         </div>
         <div>
-          <button className="addContext-btn">
-            <RiPlayListAddLine />
-            <p>Add Context</p>
-          </button>
+          {contextExists ? (
+            <div>
+              <input />
+              <button onClick={handleContext}>
+                <MdOutlineDeleteOutline />
+              </button>
+            </div>
+          ) : (
+            <button className="addContext-btn" onClick={handleContext}>
+              <RiPlayListAddLine />
+              <p>Add Context</p>
+            </button>
+          )}
         </div>
         <div className="text-area-div">
           {messages.map((msg, index) => (
@@ -128,7 +160,11 @@ function App() {
                 msg.sender === "user" ? "user-message" : "bot-message"
               }`}
             >
-              <ReactMarkdown>{msg.text}</ReactMarkdown>
+              {msg.text ? (
+                <ReactMarkdown>{msg.text}</ReactMarkdown>
+              ) : (
+                <p>searching...</p>
+              )}
             </div>
           ))}
           <textarea
@@ -141,6 +177,7 @@ function App() {
           ></textarea>
           <div className="search-div">
             <div>
+              <button>Type +</button>
               <button>Change tone +</button>
               <button>Length +</button>
             </div>
