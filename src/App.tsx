@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { RiPlayListAddLine } from "react-icons/ri";
 import { MdOutlineSend } from "react-icons/md";
+import ReactMarkdown from "react-markdown";
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 import "./App.css";
 
@@ -13,10 +14,49 @@ function App() {
     window.close();
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      console.log("Key pressed:", e.key);
+      console.log(apiKey);
+      if (question.trim() === "") {
+        console.log("Please enter a question.");
+        return;
+      }
+
+      const userMsg = { sender: "user", text: question };
+      setMessages((prev) => [...prev, userMsg]);
+      try {
+        const res = await fetch(
+          "https://openrouter.ai/api/v1/chat/completions",
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${apiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              model: "deepseek/deepseek-r1:free",
+              messages: [
+                {
+                  role: "user",
+                  content: question,
+                },
+              ],
+            }),
+          }
+        );
+
+        const data = await res.json();
+        console.log("Response from OpenRouter:", data);
+        console.log("Response text:", data.choices[0].message.content);
+        setMessages((prev) => [
+          ...prev,
+          { sender: "bot", text: data.choices[0].message.content },
+        ]);
+      } catch (error) {
+        console.error("Error fetching from OpenRouter or saving to DB:", error);
+      }
+      setQuestion("");
     }
   };
 
@@ -50,11 +90,14 @@ function App() {
       const data = await res.json();
       console.log("Response from OpenRouter:", data);
       console.log("Response text:", data.choices[0].message.content);
-      console.log(messages);
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", text: data.choices[0].message.content },
+      ]);
     } catch (error) {
       console.error("Error fetching from OpenRouter or saving to DB:", error);
     }
-    setQuestion(""); // Clear the input after sending
+    setQuestion("");
   };
 
   return (
@@ -78,6 +121,16 @@ function App() {
           </button>
         </div>
         <div className="text-area-div">
+          {messages.map((msg, index) => (
+            <div
+              key={index}
+              className={`message ${
+                msg.sender === "user" ? "user-message" : "bot-message"
+              }`}
+            >
+              <ReactMarkdown>{msg.text}</ReactMarkdown>
+            </div>
+          ))}
           <textarea
             value={question}
             className="text-area"
