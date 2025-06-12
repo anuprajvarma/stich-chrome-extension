@@ -1,18 +1,8 @@
-// chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-//   console.log("Received message:", message, "from sender:", sender);
-//   if (message.type === "AI") {
-//     console.log("Received AI message:", message.payload + sender);
-//     // Call AI API or process here
-//   } else if (message.type === "TRANSLATE") {
-//     console.log("Received Translate message:", message.payload);
-//     // Call Translate API or process here
-//   }
-
-//   // Optional: send a response
-//   sendResponse({ status: "ok" });
-
-//   return true; // needed if response is async
-// });
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log("✅ Received message:", message + sender);
+  sendResponse({ status: "received" });
+  return true;
+});
 
 // background.js or service_worker.js
 chrome.action.onClicked.addListener((tab) => {

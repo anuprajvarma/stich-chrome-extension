@@ -9,15 +9,11 @@ export default defineConfig({
     rollupOptions: {
       external: ["chrome"],
       input: {
-        popup: resolve(__dirname, "index.html"),
         content: resolve(__dirname, "src/content.ts"), // include this
         background: "src/background.ts",
       },
       output: {
-        entryFileNames: (chunk) => {
-          if (chunk.name === "content") return "content.js";
-          return "[name].js";
-        },
+        entryFileNames: "[name].js",
       },
     },
     outDir: "dist",

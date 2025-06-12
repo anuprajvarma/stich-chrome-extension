@@ -1,8 +1,21 @@
 let popup: HTMLDivElement | null = null;
 
-document.addEventListener("mouseup", () => {
+document.addEventListener("mousedown", (e) => {
+  // If the user clicks outside the popup, remove it
+  if (popup && e.target instanceof Node && !popup.contains(e.target)) {
+    popup.remove();
+    popup = null;
+  }
+});
+
+document.addEventListener("mouseup", (e) => {
   const selection = window.getSelection();
   const text = selection?.toString().trim();
+
+  // ✅ Don't show popup if clicked inside existing popup
+  if (popup && e.target instanceof Node && popup.contains(e.target)) {
+    return;
+  }
 
   if (popup) {
     popup.remove();
@@ -10,7 +23,7 @@ document.addEventListener("mouseup", () => {
   }
 
   if (text && text.length > 0 && selection?.rangeCount) {
-    console.log(`Selected text: "${text}"`);
+    console.log("✅ Mouse up event detected, selection text:", text);
     const range = selection.getRangeAt(0);
     const rect = range.getBoundingClientRect();
 
@@ -19,42 +32,41 @@ document.addEventListener("mouseup", () => {
 
     const aiBtn = document.createElement("button");
     aiBtn.textContent = "AI";
+    aiBtn.style.backgroundColor = "blue";
     aiBtn.onclick = () => {
-      chrome.runtime.sendMessage({
-        type: "AI",
-        payload: text,
+      //   alert("AI button clicked with text: " + text);
+      chrome.runtime.sendMessage({ type: "AI", payload: text }, (response) => {
+        console.log("Background response:", response);
       });
     };
 
     const translateBtn = document.createElement("button");
     translateBtn.textContent = "Translate";
     translateBtn.onclick = () => {
-      chrome.runtime.sendMessage({
-        type: "TRANSLATE",
-        payload: text,
-      });
+      //   alert("Translate button clicked with text: " + text);
+      chrome.runtime.sendMessage(
+        { type: "TRANSLATE", payload: text },
+        (response) => {
+          console.log("Background response:", response);
+        }
+      );
     };
 
     popup.appendChild(aiBtn);
     popup.appendChild(translateBtn);
 
-    popup.style.position = "absolute";
-    popup.style.zIndex = "9999"; // Optional styling
-    popup.style.background = "white";
-    popup.style.border = "1px solid #ccc";
-    popup.style.padding = "5px";
-    popup.style.width = "100px";
+    Object.assign(popup.style, {
+      position: "absolute",
+      zIndex: "9999",
+      background: "white",
+      border: "1px solid #ccc",
+      padding: "5px",
+      width: "100px",
+    });
 
     document.body.appendChild(popup);
 
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    popup.style.top = `${rect.bottom + scrollTop + 5}px`;
+    popup.style.top = `${rect.bottom + window.scrollY + 5}px`;
     popup.style.left = `${rect.left + window.scrollX}px`;
-  }
-});
-
-document.addEventListener("mousedown", (e: MouseEvent) => {
-  if (popup && e.target instanceof Node && !popup.contains(e.target)) {
-    popup.remove();
   }
 });
