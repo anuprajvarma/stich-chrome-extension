@@ -19,6 +19,13 @@ body {
   width: 100%;
 }
 
+.tabs {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+}
+
 .stich {
   display: flex;
   gap: 4px;
@@ -104,4 +111,31 @@ body {
 .type {
   display: flex;
   gap: 10px;
+}
+
+.language-options-div {
+  display: flex;
+  gap: 10px;
+}
+
+#selection-popup {
+  position: absolute;
+  background: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+  border-radius: 6px;
+  z-index: 999999;
+  display: flex;
+  gap: 8px;
+}
+
+#selection-popup button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
 }

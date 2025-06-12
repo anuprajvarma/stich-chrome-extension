@@ -4,7 +4,6 @@
   "name": "Stich",
   "description": "Stop switching tabs to chat with AI; use AI on any site instantly. Write emails & messages, fix grammar mistakes, rephrase text, change writing tone, summarize text, and much more using ChatGPT AI. Works on all sites. Free to use.",
   "action": {
-    "default_popup": "index.html",
     "default_icon": "icon.png"
   },
   "permissions": ["scripting", "activeTab"],
@@ -15,7 +14,8 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "run_at": "document_idle"
     }
   ],
   "web_accessible_resources": [

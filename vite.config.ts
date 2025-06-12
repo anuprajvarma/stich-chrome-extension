@@ -5,7 +5,9 @@ import { resolve } from "path";
 export default defineConfig({
   plugins: [react()],
   build: {
+    target: "esnext",
     rollupOptions: {
+      external: ["chrome"],
       input: {
         popup: resolve(__dirname, "index.html"),
         content: resolve(__dirname, "src/content.ts"), // include this
