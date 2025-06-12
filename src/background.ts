@@ -1,22 +1,23 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.type === "TEXT_SELECTED") {
-    console.log("Text selected:", message.text);
-    // const urlWithQuery = chrome.runtime.getURL(
-    //   `index.html?text=${encodeURIComponent(message.text)}`
-    // );
-    // chrome.windows.create({
-    //   url: urlWithQuery,
-    //   type: "popup",
-    //   width: 400,
-    //   height: 600,
-    // });
-  }
-});
+// chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+//   console.log("Received message:", message, "from sender:", sender);
+//   if (message.type === "AI") {
+//     console.log("Received AI message:", message.payload + sender);
+//     // Call AI API or process here
+//   } else if (message.type === "TRANSLATE") {
+//     console.log("Received Translate message:", message.payload);
+//     // Call Translate API or process here
+//   }
+
+//   // Optional: send a response
+//   sendResponse({ status: "ok" });
+
+//   return true; // needed if response is async
+// });
 
 // background.js or service_worker.js
 chrome.action.onClicked.addListener((tab) => {
   chrome.scripting.executeScript({
-    target: { tabId: tab.id },
+    target: { tabId: tab.id ?? 0 },
     func: toggleChatbot,
   });
 });
