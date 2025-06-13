@@ -9,7 +9,7 @@ import "./App.css";
 
 function App() {
   const selectRef = useRef<HTMLSelectElement>(null);
-  const [message, setMessage] = useState("");
+  // const [message, setMessage] = useState("");
   // const [selectedTextWeb, setSelectedText] = useState("");
   const [selectedLength, setSelectedLength] = useState("");
   const [selectedTone, setSelectedTone] = useState("");
@@ -28,24 +28,8 @@ function App() {
     []
   );
   const onclose = () => {
-    const popup = document.getElementById("chatbot-popup");
-    if (popup) {
-      console.log("Closing popup");
-      popup.remove(); // Close injected iframe
-    }
+    window.parent.postMessage({ type: "REMOVE_IFRAME" }, "*");
   };
-
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data?.type === "FROM_CONTENT") {
-        console.log("📩 Message received in React app:", event.data.payload);
-        setMessage(event.data.payload);
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, []);
 
   useEffect(() => {
     if (selectRef.current) {
@@ -53,16 +37,6 @@ function App() {
       selectRef.current.click();
     }
   }, []);
-
-  // useEffect(() => {
-  //   const params = new URLSearchParams(window.location.search);
-  //   const text = params.get("text");
-  //   if (text) {
-  //     setSelectedText(text);
-  //     // setContextExists(true);
-  //     console.log("Received selected text:", text);
-  //   }
-  // }, []);
 
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -219,7 +193,7 @@ function App() {
             <div>
               <img src="icon.png" width={30} height={30} />
             </div>
-            <p className="stich-title">Stich ${message}</p>
+            <p className="stich-title">Stich</p>
           </div>
           <button className="close-btn" onClick={onclose}>
             X
