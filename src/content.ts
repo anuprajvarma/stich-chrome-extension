@@ -35,16 +35,12 @@ document.addEventListener("mouseup", (e) => {
     aiBtn.style.backgroundColor = "blue";
     aiBtn.onclick = () => {
       toggleChatbot();
-      //   alert("AI button clicked with text: " + text);
-      //   chrome.runtime.sendMessage({ type: "AI", payload: text });
     };
 
     const translateBtn = document.createElement("button");
     translateBtn.textContent = "Translate";
     translateBtn.onclick = () => {
       toggleChatbot();
-      //   alert("Translate button clicked with text: " + text);
-      //   chrome.runtime.sendMessage({ type: "TRANSLATE", payload: text });
     };
 
     popup.appendChild(aiBtn);
