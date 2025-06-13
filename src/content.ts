@@ -67,6 +67,10 @@ document.addEventListener("mouseup", (e) => {
 });
 
 function toggleChatbot() {
+  if (popup) {
+    popup.remove();
+    popup = null;
+  }
   console.log("Toggling chatbot popup...");
   const existing = document.getElementById("chatbot-popup");
 
