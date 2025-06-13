@@ -34,13 +34,13 @@ document.addEventListener("mouseup", (e) => {
     aiBtn.textContent = "AI";
     aiBtn.style.backgroundColor = "blue";
     aiBtn.onclick = () => {
-      toggleChatbot();
+      toggleChatbot(text);
     };
 
     const translateBtn = document.createElement("button");
     translateBtn.textContent = "Translate";
     translateBtn.onclick = () => {
-      toggleChatbot();
+      toggleChatbot(text);
     };
 
     popup.appendChild(aiBtn);
@@ -62,7 +62,7 @@ document.addEventListener("mouseup", (e) => {
   }
 });
 
-function toggleChatbot() {
+function toggleChatbot(text: string) {
   if (popup) {
     popup.remove();
     popup = null;
@@ -75,6 +75,7 @@ function toggleChatbot() {
     existing.remove(); // 👈 Closes the iframe popups
   } else {
     const iframe = document.createElement("iframe");
+
     iframe.src = chrome.runtime.getURL("index.html");
     iframe.id = "chatbot-popup";
 
@@ -90,7 +91,17 @@ function toggleChatbot() {
       boxShadow: "0 0 10px rgba(0,0,0,0.3)",
       borderRadius: "12px",
     });
-
+    iframe.onload = () => {
+      console.log("✅ iframe loaded, sending text to React...");
+      // ⏳ delay added in case React isn't mounted
+      setTimeout(() => {
+        iframe.contentWindow?.postMessage(
+          { type: "PASS_TEXT", payload: text },
+          "*"
+        );
+      }, 200); // increase if needed
+    };
+    console.log("chal gya pahle");
     document.body.appendChild(iframe);
   }
 }

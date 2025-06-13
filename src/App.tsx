@@ -9,6 +9,7 @@ import "./App.css";
 
 function App() {
   const selectRef = useRef<HTMLSelectElement>(null);
+  // const [incomingText, setIncomingText] = useState("");
   // const [message, setMessage] = useState("");
   // const [selectedTextWeb, setSelectedText] = useState("");
   const [selectedLength, setSelectedLength] = useState("");
@@ -30,6 +31,21 @@ function App() {
   const onclose = () => {
     window.parent.postMessage({ type: "REMOVE_IFRAME" }, "*");
   };
+
+  useEffect(() => {
+    console.log("app mount ho gya");
+    const handleMessage = (event: MessageEvent) => {
+      console.log("📩 React got message:", event.data);
+      if (event.data?.type === "PASS_TEXT") {
+        console.log("🧠 Received from content.js:", event.data.payload);
+        setContextExists(true);
+        setContext(event.data.payload);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
 
   useEffect(() => {
     if (selectRef.current) {
