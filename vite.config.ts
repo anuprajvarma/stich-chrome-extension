@@ -9,6 +9,7 @@ export default defineConfig({
     rollupOptions: {
       external: ["chrome"],
       input: {
+        main: resolve(__dirname, "index.html"),
         content: resolve(__dirname, "src/content.ts"), // include this
         background: "src/background.ts",
       },

@@ -34,22 +34,17 @@ document.addEventListener("mouseup", (e) => {
     aiBtn.textContent = "AI";
     aiBtn.style.backgroundColor = "blue";
     aiBtn.onclick = () => {
+      toggleChatbot();
       //   alert("AI button clicked with text: " + text);
-      chrome.runtime.sendMessage({ type: "AI", payload: text }, (response) => {
-        console.log("Background response:", response);
-      });
+      //   chrome.runtime.sendMessage({ type: "AI", payload: text });
     };
 
     const translateBtn = document.createElement("button");
     translateBtn.textContent = "Translate";
     translateBtn.onclick = () => {
+      toggleChatbot();
       //   alert("Translate button clicked with text: " + text);
-      chrome.runtime.sendMessage(
-        { type: "TRANSLATE", payload: text },
-        (response) => {
-          console.log("Background response:", response);
-        }
-      );
+      //   chrome.runtime.sendMessage({ type: "TRANSLATE", payload: text });
     };
 
     popup.appendChild(aiBtn);
@@ -70,3 +65,42 @@ document.addEventListener("mouseup", (e) => {
     popup.style.left = `${rect.left + window.scrollX}px`;
   }
 });
+
+function toggleChatbot() {
+  console.log("Toggling chatbot popup...");
+  if (popup) {
+    popup.remove();
+    popup = null;
+  }
+  //   const existing = document.getElementById("chatbot-popup");
+  console.log("Injecting chatbot popup...");
+  const iframe = document.createElement("iframe");
+  iframe.src = chrome.runtime.getURL("index.html");
+  iframe.id = "chatbot-popup";
+
+  Object.assign(iframe.style, {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: "30rem",
+    height: "20rem",
+    border: "none",
+    zIndex: "999999",
+    boxShadow: "0 0 10px rgba(0,0,0,0.3)",
+    borderRadius: "12px",
+  });
+
+  // ✅ Wait until iframe loads before sending postMessage
+  iframe.onload = () => {
+    console.log("✅ Iframe loaded. Sending message...");
+    iframe.contentWindow?.postMessage(
+      { type: "FROM_CONTENT", payload: "Hello from content.ts" },
+      "*"
+    );
+  };
+
+  document.body.appendChild(iframe);
+  popup = iframe; // Store the popup reference
+  //   }
+}

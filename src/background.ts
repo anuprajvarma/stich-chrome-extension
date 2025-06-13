@@ -1,7 +1,6 @@
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.log("✅ Received message:", message + sender);
   sendResponse({ status: "received" });
-  return true;
 });
 
 // background.js or service_worker.js
@@ -13,6 +12,7 @@ chrome.action.onClicked.addListener((tab) => {
 });
 
 function toggleChatbot() {
+  console.log("Toggling chatbot popup...");
   const existing = document.getElementById("chatbot-popup");
   if (existing) {
     console.log("Chatbot popup already exists, removing it...");
