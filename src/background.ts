@@ -34,9 +34,6 @@ function toggleChatbot() {
       boxShadow: "0 0 10px rgba(0,0,0,0.3)",
       borderRadius: "12px",
     });
-    iframe.onload = () => {
-      iframe.contentWindow?.postMessage({ type: "INIT" }, "*");
-    };
     document.body.appendChild(iframe);
   }
 }

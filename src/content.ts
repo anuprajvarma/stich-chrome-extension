@@ -95,11 +95,6 @@ function toggleChatbot() {
       borderRadius: "12px",
     });
 
-    // ✅ Wait until iframe loads before sending postMessage
-    iframe.onload = () => {
-      iframe.contentWindow?.postMessage({ type: "INIT" }, "*");
-    };
-
     document.body.appendChild(iframe);
   }
 }
