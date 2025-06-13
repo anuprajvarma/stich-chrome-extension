@@ -16,7 +16,7 @@ function toggleChatbot() {
   const existing = document.getElementById("chatbot-popup");
   if (existing) {
     console.log("Chatbot popup already exists, removing it...");
-    existing.remove(); // 👈 Closes the iframe popup
+    existing.remove();
   } else {
     console.log("Injecting chatbot popup...");
     const iframe = document.createElement("iframe");
