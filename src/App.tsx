@@ -4,23 +4,21 @@ import { MdOutlineSend } from "react-icons/md";
 import ReactMarkdown from "react-markdown";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
+const email = import.meta.env.VITE_MY_EMAIL;
 // const google_apiKey = import.meta.env.VITE_API_KEY;
 import "./App.css";
 
 function App() {
   const selectRef = useRef<HTMLSelectElement>(null);
-  // const [incomingText, setIncomingText] = useState("");
-  // const [message, setMessage] = useState("");
-  // const [selectedTextWeb, setSelectedText] = useState("");
   const [selectedLength, setSelectedLength] = useState("");
   const [selectedTone, setSelectedTone] = useState("");
   const [question, setQuestion] = useState("");
   const [contextExists, setContextExists] = useState(false);
   const [isAskAIActive, setIsAskAIActive] = useState(true);
   const [context, setContext] = useState("");
-  const [translate1, setTranslate1] = useState("English");
-  const [translate2, setTranslate2] = useState("Japanise");
-  // const [translateText, setTranslateText] = useState("");
+  const [translate1, setTranslate1] = useState("en");
+  const [translate2, setTranslate2] = useState("zh-TW");
+  const [translateText, setTranslateText] = useState("");
   // const [isTranslateActive, setIsTranslateActive] = useState(false);
   const [isTypeExist, setIsTypeExist] = useState(false);
   const [isLengthExist, setIsLengthExist] = useState(false);
@@ -48,6 +46,32 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const callTranslatorAPI = async () => {
+      console.log(
+        "Calling translator API with context:",
+        translate1 + context + translate2 + email
+      );
+      const res = await fetch(
+        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
+          context
+        )}&langpair=${translate1}|${translate2}&de=${email}`
+      );
+      const data = await res.json();
+      console.log("Translation data:", data);
+      setTranslateText(data.matches[0].translation);
+      console.log("Translation result:", data.matches[0].translation);
+    };
+    if (
+      context !== "" &&
+      translate1 &&
+      translate2 &&
+      translate1 !== translate2
+    ) {
+      callTranslatorAPI();
+    }
+  }, [isAskAIActive, context, translate1, translate2]);
+
+  useEffect(() => {
     if (selectRef.current) {
       selectRef.current.focus();
       selectRef.current.click();
@@ -67,6 +91,8 @@ function App() {
   };
 
   const handleContext = () => {
+    setContext("");
+    setTranslateText("");
     setContextExists(!contextExists);
   };
 
@@ -322,25 +348,19 @@ function App() {
                   value={translate1}
                   onChange={(e) => handleTranslateOption1(e)}
                 >
-                  <option value="English">English</option>
-                  <option value="Korean">Korean</option>
-                  <option value="Chinese, Simplefied">
-                    Chinese, Simplefied
-                  </option>
-                  <option value="Chinese, Traditional">
-                    Chinese, Traditional
-                  </option>
-                  <option value="Japanise">Japanise</option>
-                  <option value="Spanish">Spanish</option>
-                  <option value="Russian">Russian</option>
-                  <option value="French">French</option>
-                  <option value="Portuguese">Portuguese</option>
-                  <option value="German">German</option>
-                  <option value="Italian">Italian</option>
-                  <option value="Dutch">Dutch</option>
-                  <option value="Indonesian">Indonesian</option>
-                  <option value="Filipino">Filipino</option>
-                  <option value="Vietnamese">Vietnamese</option>
+                  <option value="en">English</option>
+                  <option value="ko">Korean</option>
+                  <option value="zh-CN">Chinese, Simplefied</option>
+                  <option value="zh-TW">Chinese, Traditional</option>
+                  <option value="ja">Japanese</option>
+                  <option value="es">Spanish</option>
+                  <option value="ru">Russian</option>
+                  <option value="fr">French</option>
+                  <option value="pt">Portuguese</option>
+                  <option value="de">German</option>
+                  <option value="it">Italian</option>
+                  <option value="nl">Dutch</option>
+                  <option value="id">Indonesian</option>
                 </select>
               </div>
               <div>
@@ -348,29 +368,23 @@ function App() {
                   value={translate2}
                   onChange={(e) => handleTranslateOption2(e)}
                 >
-                  <option value="English">English</option>
-                  <option value="Korean">Korean</option>
-                  <option value="Chinese, Simplefied">
-                    Chinese, Simplefied
-                  </option>
-                  <option value="Chinese, Traditional">
-                    Chinese, Traditional
-                  </option>
-                  <option value="Japanise">Japanise</option>
-                  <option value="Spanish">Spanish</option>
-                  <option value="Russian">Russian</option>
-                  <option value="French">French</option>
-                  <option value="Portuguese">Portuguese</option>
-                  <option value="German">German</option>
-                  <option value="Italian">Italian</option>
-                  <option value="Dutch">Dutch</option>
-                  <option value="Indonesian">Indonesian</option>
-                  <option value="Filipino">Filipino</option>
-                  <option value="Vietnamese">Vietnamese</option>
+                  <option value="zh-TW">Chinese, Traditional</option>
+                  <option value="en">English</option>
+                  <option value="ko">Korean</option>
+                  <option value="zh-CN">Chinese, Simplefied</option>
+                  <option value="ja">Japanese</option>
+                  <option value="es">Spanish</option>
+                  <option value="ru">Russian</option>
+                  <option value="fr">French</option>
+                  <option value="pt">Portuguese</option>
+                  <option value="de">German</option>
+                  <option value="it">Italian</option>
+                  <option value="nl">Dutch</option>
+                  <option value="id">Indonesian</option>
                 </select>
               </div>
             </div>
-            {/* <div>{translateText}</div> */}
+            <div>{translateText}</div>
           </div>
         )}
       </div>
