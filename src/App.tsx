@@ -230,163 +230,167 @@ function App() {
   return (
     <>
       <div className="top-div">
-        <div className="header">
-          <div className="stich">
-            <div>
-              <img src="icon.png" width={30} height={30} />
-            </div>
-            <p className="stich-title">Stich</p>
-          </div>
-          <button className="close-btn" onClick={onclose}>
-            X
-          </button>
-        </div>
-        <div className="tabs">
-          <button className="ask-ai" onClick={handleAskAI}>
-            Ask AI
-          </button>
-          <button className="translate" onClick={handleTranslate}>
-            Translate
-          </button>
-          {/* <button className="improve-writing" onClick={handleImroveWriting}>
+        <div className="wrap-div">
+          <div className="header">
+            <div className="stich">
+              <div className="stich-div">
+                <img src="icon.png" width={25} height={25} />
+              </div>
+              <div className="tabs">
+                <div className="ask-ai" onClick={handleAskAI}>
+                  Ask AI
+                </div>
+                <div className="translate" onClick={handleTranslate}>
+                  Translate
+                </div>
+                {/* <button className="improve-writing" onClick={handleImroveWriting}>
             Improve writing
           </button> */}
-        </div>
-        <div>
-          {contextExists ? (
-            <div>
-              <input
-                value={context}
-                onChange={(e) => handleContextInput(e.target.value)}
-              />
-              <button onClick={handleContext}>
-                <MdOutlineDeleteOutline />
-              </button>
+              </div>
             </div>
-          ) : (
-            <button className="addContext-btn" onClick={handleContext}>
-              <RiPlayListAddLine />
-              <p>Add Context</p>
+            <button className="close-btn" onClick={onclose}>
+              X
             </button>
-          )}
-        </div>
-        {isAskAIActive ? (
-          <div className="text-area-div">
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`message ${
-                  msg.sender === "user" ? "user-message" : "bot-message"
-                }`}
-              >
-                {msg.text ? (
-                  <ReactMarkdown>{msg.text}</ReactMarkdown>
-                ) : (
-                  <p>searching...</p>
-                )}
-              </div>
-            ))}
-            <textarea
-              value={question}
-              className="text-area"
-              id="myTextarea"
-              placeholder="Type something..."
-              onChange={(e) => setQuestion(e.target.value)}
-              onKeyDown={(e) => handleKeyDown(e)}
-            ></textarea>
-            <div className="search-div">
-              <div className="type">
-                {isTypeExist ? (
-                  <div>
-                    <select ref={selectRef}>
-                      <option value="reasoning">reasoning</option>
-                    </select>
-                    <button onClick={handleType}>X</button>
-                  </div>
-                ) : (
-                  <button onClick={handleType}>Type +</button>
-                )}
-                {isToneExist ? (
-                  <div>
-                    <select value={selectedTone} onChange={handleToneOption}>
-                      <option value="profesional">profesional</option>
-                      <option value="casual">casual</option>
-                      <option value="straightforward">straightforward</option>
-                      <option value="confident">confident</option>
-                      <option value="friendly">friendly</option>
-                    </select>
-                    <button onClick={handleTone}>X</button>
-                  </div>
-                ) : (
-                  <button onClick={handleTone}>Change tone +</button>
-                )}
-                {isLengthExist ? (
-                  <div>
-                    <select value={selectedLength} onChange={handleLegthOption}>
-                      <option value="short">Short</option>
-                      <option value="medium">Medium</option>
-                      <option value="long">Long</option>
-                    </select>
-                    <button onClick={handleLength}>X</button>
-                  </div>
-                ) : (
-                  <button onClick={handleLength}>Length +</button>
-                )}
-              </div>
-              <div className="">
-                <button onClick={handleChat}>
-                  <MdOutlineSend />
+          </div>
+          <div>
+            {contextExists ? (
+              <div>
+                <input
+                  value={context}
+                  onChange={(e) => handleContextInput(e.target.value)}
+                />
+                <button onClick={handleContext}>
+                  <MdOutlineDeleteOutline />
                 </button>
               </div>
-            </div>
+            ) : (
+              <button className="addContext-btn" onClick={handleContext}>
+                <RiPlayListAddLine />
+                <p>Add Context</p>
+              </button>
+            )}
           </div>
-        ) : (
-          <div>
-            <div className="language-options-div">
-              <div>
-                <select
-                  value={translate1}
-                  onChange={(e) => handleTranslateOption1(e)}
+          {isAskAIActive ? (
+            <div className="text-area-div">
+              {messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`message ${
+                    msg.sender === "user" ? "user-message" : "bot-message"
+                  }`}
                 >
-                  <option value="en">English</option>
-                  <option value="ko">Korean</option>
-                  <option value="zh-CN">Chinese, Simplefied</option>
-                  <option value="zh-TW">Chinese, Traditional</option>
-                  <option value="ja">Japanese</option>
-                  <option value="es">Spanish</option>
-                  <option value="ru">Russian</option>
-                  <option value="fr">French</option>
-                  <option value="pt">Portuguese</option>
-                  <option value="de">German</option>
-                  <option value="it">Italian</option>
-                  <option value="nl">Dutch</option>
-                  <option value="id">Indonesian</option>
-                </select>
-              </div>
-              <div>
-                <select
-                  value={translate2}
-                  onChange={(e) => handleTranslateOption2(e)}
-                >
-                  <option value="zh-TW">Chinese, Traditional</option>
-                  <option value="en">English</option>
-                  <option value="ko">Korean</option>
-                  <option value="zh-CN">Chinese, Simplefied</option>
-                  <option value="ja">Japanese</option>
-                  <option value="es">Spanish</option>
-                  <option value="ru">Russian</option>
-                  <option value="fr">French</option>
-                  <option value="pt">Portuguese</option>
-                  <option value="de">German</option>
-                  <option value="it">Italian</option>
-                  <option value="nl">Dutch</option>
-                  <option value="id">Indonesian</option>
-                </select>
+                  {msg.text ? (
+                    <ReactMarkdown>{msg.text}</ReactMarkdown>
+                  ) : (
+                    <p>searching...</p>
+                  )}
+                </div>
+              ))}
+              <textarea
+                value={question}
+                className="text-area"
+                id="myTextarea"
+                placeholder="Type something..."
+                onChange={(e) => setQuestion(e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e)}
+              ></textarea>
+              <div className="search-div">
+                <div className="type">
+                  {isTypeExist ? (
+                    <div>
+                      <select ref={selectRef}>
+                        <option value="reasoning">reasoning</option>
+                      </select>
+                      <button onClick={handleType}>X</button>
+                    </div>
+                  ) : (
+                    <button onClick={handleType}>Type +</button>
+                  )}
+                  {isToneExist ? (
+                    <div>
+                      <select value={selectedTone} onChange={handleToneOption}>
+                        <option value="profesional">profesional</option>
+                        <option value="casual">casual</option>
+                        <option value="straightforward">straightforward</option>
+                        <option value="confident">confident</option>
+                        <option value="friendly">friendly</option>
+                      </select>
+                      <button onClick={handleTone}>X</button>
+                    </div>
+                  ) : (
+                    <button onClick={handleTone}>Change tone +</button>
+                  )}
+                  {isLengthExist ? (
+                    <div>
+                      <select
+                        value={selectedLength}
+                        onChange={handleLegthOption}
+                      >
+                        <option value="short">Short</option>
+                        <option value="medium">Medium</option>
+                        <option value="long">Long</option>
+                      </select>
+                      <button onClick={handleLength}>X</button>
+                    </div>
+                  ) : (
+                    <button onClick={handleLength}>Length +</button>
+                  )}
+                </div>
+                <div className="">
+                  <button onClick={handleChat}>
+                    <MdOutlineSend />
+                  </button>
+                </div>
               </div>
             </div>
-            <div>{translateText}</div>
-          </div>
-        )}
+          ) : (
+            <div>
+              <div className="language-options-div">
+                <div>
+                  <select
+                    value={translate1}
+                    onChange={(e) => handleTranslateOption1(e)}
+                  >
+                    <option value="en">English</option>
+                    <option value="ko">Korean</option>
+                    <option value="zh-CN">Chinese, Simplefied</option>
+                    <option value="zh-TW">Chinese, Traditional</option>
+                    <option value="ja">Japanese</option>
+                    <option value="es">Spanish</option>
+                    <option value="ru">Russian</option>
+                    <option value="fr">French</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="de">German</option>
+                    <option value="it">Italian</option>
+                    <option value="nl">Dutch</option>
+                    <option value="id">Indonesian</option>
+                  </select>
+                </div>
+                <div>
+                  <select
+                    value={translate2}
+                    onChange={(e) => handleTranslateOption2(e)}
+                  >
+                    <option value="zh-TW">Chinese, Traditional</option>
+                    <option value="en">English</option>
+                    <option value="ko">Korean</option>
+                    <option value="zh-CN">Chinese, Simplefied</option>
+                    <option value="ja">Japanese</option>
+                    <option value="es">Spanish</option>
+                    <option value="ru">Russian</option>
+                    <option value="fr">French</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="de">German</option>
+                    <option value="it">Italian</option>
+                    <option value="nl">Dutch</option>
+                    <option value="id">Indonesian</option>
+                  </select>
+                </div>
+              </div>
+              <div>{translateText}</div>
+            </div>
+          )}
+        </div>
       </div>
     </>
   );
