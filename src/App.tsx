@@ -243,14 +243,11 @@ function App() {
                 <div className="translate" onClick={handleTranslate}>
                   Translate
                 </div>
-                {/* <button className="improve-writing" onClick={handleImroveWriting}>
-            Improve writing
-          </button> */}
               </div>
             </div>
-            <button className="close-btn" onClick={onclose}>
+            <div className="close-btn" onClick={onclose}>
               X
-            </button>
+            </div>
           </div>
           <div>
             {contextExists ? (
@@ -304,7 +301,9 @@ function App() {
                       <button onClick={handleType}>X</button>
                     </div>
                   ) : (
-                    <button onClick={handleType}>Type +</button>
+                    <button className="btn" onClick={handleType}>
+                      Type +
+                    </button>
                   )}
                   {isToneExist ? (
                     <div>
@@ -318,7 +317,9 @@ function App() {
                       <button onClick={handleTone}>X</button>
                     </div>
                   ) : (
-                    <button onClick={handleTone}>Change tone +</button>
+                    <button className="btn" onClick={handleTone}>
+                      Change tone +
+                    </button>
                   )}
                   {isLengthExist ? (
                     <div>
@@ -333,13 +334,13 @@ function App() {
                       <button onClick={handleLength}>X</button>
                     </div>
                   ) : (
-                    <button onClick={handleLength}>Length +</button>
+                    <button className="btn" onClick={handleLength}>
+                      Length +
+                    </button>
                   )}
                 </div>
-                <div className="">
-                  <button onClick={handleChat}>
-                    <MdOutlineSend />
-                  </button>
+                <div onClick={handleChat}>
+                  <MdOutlineSend className="send-btn" size={20} />
                 </div>
               </div>
             </div>

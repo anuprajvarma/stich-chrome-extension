@@ -4,6 +4,7 @@ body {
   background-color: #f4f4f9;
   color: black;
   width: 40rem;
+  padding: 16px;
 }
 
 .top-div {
@@ -21,18 +22,13 @@ body {
   cursor: pointer;
 }
 
-.stich-div {
-  padding: 5px;
+/* .stich-div {
   border-right: 1px solid red;
-}
-
-/* .wrap-div {
-  padding: 10px;
 } */
 
 .header {
   display: flex;
-  border-bottom: 1px solid red;
+  /* border-bottom: 1px solid red; */
   justify-content: space-between;
   align-items: center;
   width: 100%;
@@ -76,7 +72,7 @@ body {
 }
 
 .close-btn:hover {
-  color: black;
+  color: #1955db;
 }
 
 .addContext-btn {
@@ -102,13 +98,13 @@ body {
 }
 
 .text-area {
-  width: 90%;
-  height: 150px;
+  width: 96.6%;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
   font-size: 16px;
-  resize: none;
+  min-height: 50px;
+  max-height: 500px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -149,11 +145,32 @@ body {
 }
 
 #selection-popup button {
-  background-color: #007bff;
   color: white;
   border: none;
   padding: 5px 8px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 12px;
+}
+
+.btn {
+  background-color: #1955db; /* Green */
+  border: none;
+  color: white;
+  padding: 6px 16px;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.send-btn {
+  border: none;
+  color: #1955db;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
 }
