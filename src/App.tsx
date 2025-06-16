@@ -279,20 +279,22 @@ function App() {
           </div>
           {isAskAIActive ? (
             <div className="text-area-div">
-              {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`message ${
-                    msg.sender === "user" ? "user-message" : "bot-message"
-                  }`}
-                >
-                  {msg.text ? (
-                    <ReactMarkdown>{msg.text}</ReactMarkdown>
-                  ) : (
-                    <p>searching...</p>
-                  )}
-                </div>
-              ))}
+              <div className="chatbot-div">
+                {messages.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`message ${
+                      msg.sender === "user" ? "user-message" : "bot-message"
+                    }`}
+                  >
+                    {msg.text ? (
+                      <ReactMarkdown>{msg.text}</ReactMarkdown>
+                    ) : (
+                      <p>searching...</p>
+                    )}
+                  </div>
+                ))}
+              </div>
               <textarea
                 ref={textareaRef}
                 onInput={handleInput}
