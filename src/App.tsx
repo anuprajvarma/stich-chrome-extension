@@ -26,6 +26,16 @@ function App() {
   const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
     []
   );
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleInput = () => {
+    const el = textareaRef.current;
+    if (el) {
+      el.style.height = "auto";
+      el.style.height = `${el.scrollHeight}px`;
+    }
+  };
+
   const onclose = () => {
     window.parent.postMessage({ type: "REMOVE_IFRAME" }, "*");
   };
@@ -284,6 +294,8 @@ function App() {
                 </div>
               ))}
               <textarea
+                ref={textareaRef}
+                onInput={handleInput}
                 value={question}
                 className="text-area"
                 id="myTextarea"
