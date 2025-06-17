@@ -2,7 +2,10 @@ import { useEffect, useRef, useState } from "react";
 // import { RiPlayListAddLine } from "react-icons/ri";
 import { MdOutlineSend } from "react-icons/md";
 import ReactMarkdown from "react-markdown";
+import { FaRegCopy } from "react-icons/fa6";
 import { MdOutlineDeleteOutline } from "react-icons/md";
+import "react-tooltip/dist/react-tooltip.css";
+import { Tooltip } from "react-tooltip";
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 // const email = import.meta.env.VITE_MY_EMAIL;
 // const google_apiKey = import.meta.env.VITE_API_KEY;
@@ -13,6 +16,7 @@ function App() {
   const [selectedLength, setSelectedLength] = useState("");
   const [selectedTone, setSelectedTone] = useState("");
   const [question, setQuestion] = useState("");
+  const [copy, setCopy] = useState(false);
   // const [contextExists, setContextExists] = useState(false);
   // const [isAskAIActive, setIsAskAIActive] = useState(true);
   // const [context, setContext] = useState("");
@@ -27,6 +31,18 @@ function App() {
     []
   );
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+
+  const handleCopy = async () => {
+    if (textRef.current) {
+      try {
+        await navigator.clipboard.writeText(textRef.current.innerText);
+        console.log("Text copied to clipboard:", textRef.current.innerText);
+      } catch (err) {
+        console.error("Failed to copy:", err);
+      }
+    }
+  };
 
   const handleInput = () => {
     const el = textareaRef.current;
@@ -209,6 +225,7 @@ function App() {
           const jsonStr = line.replace(/^data:\s*/, "");
 
           if (jsonStr === "[DONE]") {
+            setCopy(true);
             return;
           }
 
@@ -275,17 +292,40 @@ function App() {
           <div className="text-area-div">
             <div className="chatbot-div">
               {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`message ${
-                    msg.sender === "user" ? "user-message" : "bot-message"
-                  }`}
-                >
-                  {msg.text ? (
-                    <ReactMarkdown>{msg.text}</ReactMarkdown>
-                  ) : (
-                    <p>searching...</p>
-                  )}
+                <div className="chatbot">
+                  <div
+                    ref={textRef}
+                    style={{ whiteSpace: "pre-wrap" }}
+                    key={index}
+                    className={`message ${
+                      msg.sender === "user" ? "user-message" : "bot-message"
+                    }`}
+                  >
+                    {msg.text ? (
+                      <ReactMarkdown>{msg.text}</ReactMarkdown>
+                    ) : (
+                      <p>searching...</p>
+                    )}
+                  </div>
+                  <div>
+                    {msg.sender === "user" ? (
+                      <></>
+                    ) : msg.text ? (
+                      copy ? (
+                        <FaRegCopy
+                          data-tooltip-id="my-tooltip"
+                          data-tooltip-content="copy text"
+                          onClick={handleCopy}
+                          style={{ cursor: "pointer" }}
+                        />
+                      ) : (
+                        <></>
+                      )
+                    ) : (
+                      <></>
+                    )}
+                    <Tooltip id="my-tooltip" />
+                  </div>
                 </div>
               ))}
             </div>
