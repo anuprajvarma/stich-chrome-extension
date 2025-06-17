@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 // import { RiPlayListAddLine } from "react-icons/ri";
 import { MdOutlineSend } from "react-icons/md";
 import ReactMarkdown from "react-markdown";
-// import { MdOutlineDeleteOutline } from "react-icons/md";
+import { MdOutlineDeleteOutline } from "react-icons/md";
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 // const email = import.meta.env.VITE_MY_EMAIL;
 // const google_apiKey = import.meta.env.VITE_API_KEY;
@@ -133,9 +133,9 @@ function App() {
   //   setTranslate2(e.target.value);
   // };
 
-  const handleType = () => {
-    setIsTypeExist(!isTypeExist);
-  };
+  // const handleType = () => {
+  //   setIsTypeExist(!isTypeExist);
+  // };
 
   const handleLegthOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedLength(e.target.value);
@@ -302,7 +302,13 @@ function App() {
               ></textarea>
               <div className="search-div">
                 <div className="type">
-                  {isTypeExist ? (
+                  <button
+                    className={`${isTypeExist ? "selected-reasoning" : "btn"}`}
+                    onClick={() => setIsTypeExist(!isTypeExist)}
+                  >
+                    Reasoning
+                  </button>
+                  {/* {isTypeExist ? (
                     <div>
                       <select ref={selectRef}>
                         <option value="reasoning">reasoning</option>
@@ -313,9 +319,9 @@ function App() {
                     <button className="btn" onClick={handleType}>
                       Type +
                     </button>
-                  )}
+                  )} */}
                   {isToneExist ? (
-                    <div>
+                    <div className="tone-div">
                       <select value={selectedTone} onChange={handleToneOption}>
                         <option value="profesional">profesional</option>
                         <option value="casual">casual</option>
@@ -323,7 +329,11 @@ function App() {
                         <option value="confident">confident</option>
                         <option value="friendly">friendly</option>
                       </select>
-                      <button onClick={handleTone}>X</button>
+                      <MdOutlineDeleteOutline
+                        style={{ cursor: "pointer" }}
+                        size={18}
+                        onClick={handleTone}
+                      />
                     </div>
                   ) : (
                     <button className="btn" onClick={handleTone}>
@@ -331,7 +341,7 @@ function App() {
                     </button>
                   )}
                   {isLengthExist ? (
-                    <div>
+                    <div className="lenght-div">
                       <select
                         value={selectedLength}
                         onChange={handleLegthOption}
@@ -340,7 +350,12 @@ function App() {
                         <option value="medium">Medium</option>
                         <option value="long">Long</option>
                       </select>
-                      <button onClick={handleLength}>X</button>
+
+                      <MdOutlineDeleteOutline
+                        style={{ cursor: "pointer" }}
+                        size={18}
+                        onClick={handleLength}
+                      />
                     </div>
                   ) : (
                     <button className="btn" onClick={handleLength}>

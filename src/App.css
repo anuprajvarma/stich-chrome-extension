@@ -183,17 +183,39 @@ body {
   font-size: 12px;
 }
 
-.btn {
-  background-color: #1955db;
+.selected-reasoning {
   border: none;
-  color: white;
+  color: #1955db;
   padding: 5px 12px;
   border-radius: 5px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 12px;
+}
+
+.tone-div {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+}
+
+.lenght-div {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+}
+
+.btn {
+  border: none;
+  padding: 5px 12px;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 12px;
 }
 
 .send-btn {
