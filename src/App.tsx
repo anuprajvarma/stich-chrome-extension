@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { RiPlayListAddLine } from "react-icons/ri";
+// import { RiPlayListAddLine } from "react-icons/ri";
 import { MdOutlineSend } from "react-icons/md";
 import ReactMarkdown from "react-markdown";
-import { MdOutlineDeleteOutline } from "react-icons/md";
+// import { MdOutlineDeleteOutline } from "react-icons/md";
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
-const email = import.meta.env.VITE_MY_EMAIL;
+// const email = import.meta.env.VITE_MY_EMAIL;
 // const google_apiKey = import.meta.env.VITE_API_KEY;
 import "./App.css";
 
@@ -13,12 +13,12 @@ function App() {
   const [selectedLength, setSelectedLength] = useState("");
   const [selectedTone, setSelectedTone] = useState("");
   const [question, setQuestion] = useState("");
-  const [contextExists, setContextExists] = useState(false);
-  const [isAskAIActive, setIsAskAIActive] = useState(true);
-  const [context, setContext] = useState("");
-  const [translate1, setTranslate1] = useState("en");
-  const [translate2, setTranslate2] = useState("zh-TW");
-  const [translateText, setTranslateText] = useState("");
+  // const [contextExists, setContextExists] = useState(false);
+  // const [isAskAIActive, setIsAskAIActive] = useState(true);
+  // const [context, setContext] = useState("");
+  // const [translate1, setTranslate1] = useState("en");
+  // const [translate2, setTranslate2] = useState("zh-TW");
+  // const [translateText, setTranslateText] = useState("");
   // const [isTranslateActive, setIsTranslateActive] = useState(false);
   const [isTypeExist, setIsTypeExist] = useState(false);
   const [isLengthExist, setIsLengthExist] = useState(false);
@@ -46,8 +46,8 @@ function App() {
       console.log("📩 React got message:", event.data);
       if (event.data?.type === "PASS_TEXT") {
         console.log("🧠 Received from content.js:", event.data.payload);
-        setContextExists(true);
-        setContext(event.data.payload);
+        // setContextExists(true);
+        // setContext(event.data.payload);
       }
     };
 
@@ -55,31 +55,31 @@ function App() {
     return () => window.removeEventListener("message", handleMessage);
   }, []);
 
-  useEffect(() => {
-    const callTranslatorAPI = async () => {
-      console.log(
-        "Calling translator API with context:",
-        translate1 + context + translate2 + email
-      );
-      const res = await fetch(
-        `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
-          context
-        )}&langpair=${translate1}|${translate2}&de=${email}`
-      );
-      const data = await res.json();
-      console.log("Translation data:", data);
-      setTranslateText(data.matches[0].translation);
-      console.log("Translation result:", data.matches[0].translation);
-    };
-    if (
-      context !== "" &&
-      translate1 &&
-      translate2 &&
-      translate1 !== translate2
-    ) {
-      callTranslatorAPI();
-    }
-  }, [isAskAIActive, context, translate1, translate2]);
+  // useEffect(() => {
+  //   const callTranslatorAPI = async () => {
+  //     console.log(
+  //       "Calling translator API with context:",
+  //       translate1 + context + translate2 + email
+  //     );
+  //     const res = await fetch(
+  //       `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
+  //         context
+  //       )}&langpair=${translate1}|${translate2}&de=${email}`
+  //     );
+  //     const data = await res.json();
+  //     console.log("Translation data:", data);
+  //     setTranslateText(data.matches[0].translation);
+  //     console.log("Translation result:", data.matches[0].translation);
+  //   };
+  //   if (
+  //     context !== "" &&
+  //     translate1 &&
+  //     translate2 &&
+  //     translate1 !== translate2
+  //   ) {
+  //     callTranslatorAPI();
+  //   }
+  // }, [context, translate1, translate2]);
 
   useEffect(() => {
     if (selectRef.current) {
@@ -104,19 +104,19 @@ function App() {
     setSelectedLength("short");
   };
 
-  const handleContext = () => {
-    setContext("");
-    setTranslateText("");
-    setContextExists(!contextExists);
-  };
+  // const handleContext = () => {
+  //   // setContext("");
+  //   // setTranslateText("");
+  //   setContextExists(!contextExists);
+  // };
 
-  const handleAskAI = () => {
-    setIsAskAIActive(true);
-  };
+  // const handleAskAI = () => {
+  //   setIsAskAIActive(true);
+  // };
 
-  const handleTranslate = () => {
-    setIsAskAIActive(false);
-  };
+  // const handleTranslate = () => {
+  //   setIsAskAIActive(false);
+  // };
 
   // const handleImroveWriting = () => {};
 
@@ -125,13 +125,13 @@ function App() {
     setSelectedTone("profesional");
   };
 
-  const handleTranslateOption1 = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setTranslate1(e.target.value);
-  };
+  // const handleTranslateOption1 = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   setTranslate1(e.target.value);
+  // };
 
-  const handleTranslateOption2 = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setTranslate2(e.target.value);
-  };
+  // const handleTranslateOption2 = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   setTranslate2(e.target.value);
+  // };
 
   const handleType = () => {
     setIsTypeExist(!isTypeExist);
@@ -147,9 +147,9 @@ function App() {
     console.log("Selected tone:", e.target.value);
   };
 
-  const handleContextInput = (value: string) => {
-    setContext(value);
-  };
+  // const handleContextInput = (value: string) => {
+  //   setContext(value);
+  // };
 
   const handleChat = async () => {
     if (question.trim() === "") {
@@ -248,22 +248,12 @@ function App() {
           <div className="header">
             <div className="stich">
               <div className="stich-div">
-                <img src="icon.png" width={25} height={25} />
+                <img src="icon.png" width={20} height={20} />
               </div>
-              <div className="tabs">
-                <div className="ask-ai" onClick={handleAskAI}>
-                  Ask AI
-                </div>
-                <div className="translate" onClick={handleTranslate}>
-                  Translate
-                </div>
-              </div>
+              <p className="stich-title">Stich</p>
             </div>
-            {/* <div className="close-btn" onClick={onclose}>
-              X
-            </div> */}
           </div>
-          <div>
+          {/* <div>
             {contextExists ? (
               <div>
                 <input
@@ -280,142 +270,90 @@ function App() {
                 <p>Add Context</p>
               </button>
             )}
+          </div> */}
+
+          <div className="text-area-div">
+            <div className="chatbot-div">
+              {messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`message ${
+                    msg.sender === "user" ? "user-message" : "bot-message"
+                  }`}
+                >
+                  {msg.text ? (
+                    <ReactMarkdown>{msg.text}</ReactMarkdown>
+                  ) : (
+                    <p>searching...</p>
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="textarea-filter">
+              <textarea
+                ref={textareaRef}
+                onInput={handleInput}
+                value={question}
+                className="text-area"
+                id="myTextarea"
+                placeholder="Type something..."
+                onChange={(e) => setQuestion(e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e)}
+              ></textarea>
+              <div className="search-div">
+                <div className="type">
+                  {isTypeExist ? (
+                    <div>
+                      <select ref={selectRef}>
+                        <option value="reasoning">reasoning</option>
+                      </select>
+                      <button onClick={handleType}>X</button>
+                    </div>
+                  ) : (
+                    <button className="btn" onClick={handleType}>
+                      Type +
+                    </button>
+                  )}
+                  {isToneExist ? (
+                    <div>
+                      <select value={selectedTone} onChange={handleToneOption}>
+                        <option value="profesional">profesional</option>
+                        <option value="casual">casual</option>
+                        <option value="straightforward">straightforward</option>
+                        <option value="confident">confident</option>
+                        <option value="friendly">friendly</option>
+                      </select>
+                      <button onClick={handleTone}>X</button>
+                    </div>
+                  ) : (
+                    <button className="btn" onClick={handleTone}>
+                      Change tone +
+                    </button>
+                  )}
+                  {isLengthExist ? (
+                    <div>
+                      <select
+                        value={selectedLength}
+                        onChange={handleLegthOption}
+                      >
+                        <option value="short">Short</option>
+                        <option value="medium">Medium</option>
+                        <option value="long">Long</option>
+                      </select>
+                      <button onClick={handleLength}>X</button>
+                    </div>
+                  ) : (
+                    <button className="btn" onClick={handleLength}>
+                      Length +
+                    </button>
+                  )}
+                </div>
+                <div onClick={handleChat}>
+                  <MdOutlineSend className="send-btn" size={18} />
+                </div>
+              </div>
+            </div>
           </div>
-          {isAskAIActive ? (
-            <div className="text-area-div">
-              <div className="chatbot-div">
-                {messages.map((msg, index) => (
-                  <div
-                    key={index}
-                    className={`message ${
-                      msg.sender === "user" ? "user-message" : "bot-message"
-                    }`}
-                  >
-                    {msg.text ? (
-                      <ReactMarkdown>{msg.text}</ReactMarkdown>
-                    ) : (
-                      <p>searching...</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-              <div className="textarea-filter">
-                <textarea
-                  ref={textareaRef}
-                  onInput={handleInput}
-                  value={question}
-                  className="text-area"
-                  id="myTextarea"
-                  placeholder="Type something..."
-                  onChange={(e) => setQuestion(e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(e)}
-                ></textarea>
-                <div className="search-div">
-                  <div className="type">
-                    {isTypeExist ? (
-                      <div>
-                        <select ref={selectRef}>
-                          <option value="reasoning">reasoning</option>
-                        </select>
-                        <button onClick={handleType}>X</button>
-                      </div>
-                    ) : (
-                      <button className="btn" onClick={handleType}>
-                        Type +
-                      </button>
-                    )}
-                    {isToneExist ? (
-                      <div>
-                        <select
-                          value={selectedTone}
-                          onChange={handleToneOption}
-                        >
-                          <option value="profesional">profesional</option>
-                          <option value="casual">casual</option>
-                          <option value="straightforward">
-                            straightforward
-                          </option>
-                          <option value="confident">confident</option>
-                          <option value="friendly">friendly</option>
-                        </select>
-                        <button onClick={handleTone}>X</button>
-                      </div>
-                    ) : (
-                      <button className="btn" onClick={handleTone}>
-                        Change tone +
-                      </button>
-                    )}
-                    {isLengthExist ? (
-                      <div>
-                        <select
-                          value={selectedLength}
-                          onChange={handleLegthOption}
-                        >
-                          <option value="short">Short</option>
-                          <option value="medium">Medium</option>
-                          <option value="long">Long</option>
-                        </select>
-                        <button onClick={handleLength}>X</button>
-                      </div>
-                    ) : (
-                      <button className="btn" onClick={handleLength}>
-                        Length +
-                      </button>
-                    )}
-                  </div>
-                  <div onClick={handleChat}>
-                    <MdOutlineSend className="send-btn" size={18} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <div className="language-options-div">
-                <div>
-                  <select
-                    value={translate1}
-                    onChange={(e) => handleTranslateOption1(e)}
-                  >
-                    <option value="en">English</option>
-                    <option value="ko">Korean</option>
-                    <option value="zh-CN">Chinese, Simplefied</option>
-                    <option value="zh-TW">Chinese, Traditional</option>
-                    <option value="ja">Japanese</option>
-                    <option value="es">Spanish</option>
-                    <option value="ru">Russian</option>
-                    <option value="fr">French</option>
-                    <option value="pt">Portuguese</option>
-                    <option value="de">German</option>
-                    <option value="it">Italian</option>
-                    <option value="nl">Dutch</option>
-                    <option value="id">Indonesian</option>
-                  </select>
-                </div>
-                <div>
-                  <select
-                    value={translate2}
-                    onChange={(e) => handleTranslateOption2(e)}
-                  >
-                    <option value="zh-TW">Chinese, Traditional</option>
-                    <option value="en">English</option>
-                    <option value="ko">Korean</option>
-                    <option value="zh-CN">Chinese, Simplefied</option>
-                    <option value="ja">Japanese</option>
-                    <option value="es">Spanish</option>
-                    <option value="ru">Russian</option>
-                    <option value="fr">French</option>
-                    <option value="pt">Portuguese</option>
-                    <option value="de">German</option>
-                    <option value="it">Italian</option>
-                    <option value="nl">Dutch</option>
-                    <option value="id">Indonesian</option>
-                  </select>
-                </div>
-              </div>
-              <div>{translateText}</div>
-            </div>
-          )}
         </div>
       </div>
     </>

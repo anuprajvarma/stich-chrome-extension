@@ -4,17 +4,12 @@ body {
   background-color: #f4f4f9;
   color: black;
   width: 40rem;
-  padding: 16px;
+  padding: 8px 16px;
 }
 
 .top-div {
   display: flex;
   flex-direction: column;
-}
-
-.ask-ai {
-  padding: 5px;
-  cursor: pointer;
 }
 
 .translate {
@@ -78,7 +73,6 @@ body {
   padding: 4px 4px;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px;
   font-size: 10px;
 }
 
@@ -123,7 +117,7 @@ body {
 
 .user-message {
   background: white;
-  border: #1955db solid 1px;
+  /* border: #1955db solid 1px; */
   border-radius: 50px;
   margin-bottom: 20px;
   font-size: 10px;
