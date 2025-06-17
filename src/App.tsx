@@ -36,9 +36,9 @@ function App() {
     }
   };
 
-  const onclose = () => {
-    window.parent.postMessage({ type: "REMOVE_IFRAME" }, "*");
-  };
+  // const onclose = () => {
+  //   window.parent.postMessage({ type: "REMOVE_IFRAME" }, "*");
+  // };
 
   useEffect(() => {
     console.log("app mount ho gya");
@@ -91,6 +91,10 @@ function App() {
   const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
+      const el = textareaRef.current;
+      if (el) {
+        el.style.height = "auto";
+      }
       handleChat();
     }
   };
@@ -255,9 +259,9 @@ function App() {
                 </div>
               </div>
             </div>
-            <div className="close-btn" onClick={onclose}>
+            {/* <div className="close-btn" onClick={onclose}>
               X
-            </div>
+            </div> */}
           </div>
           <div>
             {contextExists ? (
@@ -295,66 +299,73 @@ function App() {
                   </div>
                 ))}
               </div>
-              <textarea
-                ref={textareaRef}
-                onInput={handleInput}
-                value={question}
-                className="text-area"
-                id="myTextarea"
-                placeholder="Type something..."
-                onChange={(e) => setQuestion(e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e)}
-              ></textarea>
-              <div className="search-div">
-                <div className="type">
-                  {isTypeExist ? (
-                    <div>
-                      <select ref={selectRef}>
-                        <option value="reasoning">reasoning</option>
-                      </select>
-                      <button onClick={handleType}>X</button>
-                    </div>
-                  ) : (
-                    <button className="btn" onClick={handleType}>
-                      Type +
-                    </button>
-                  )}
-                  {isToneExist ? (
-                    <div>
-                      <select value={selectedTone} onChange={handleToneOption}>
-                        <option value="profesional">profesional</option>
-                        <option value="casual">casual</option>
-                        <option value="straightforward">straightforward</option>
-                        <option value="confident">confident</option>
-                        <option value="friendly">friendly</option>
-                      </select>
-                      <button onClick={handleTone}>X</button>
-                    </div>
-                  ) : (
-                    <button className="btn" onClick={handleTone}>
-                      Change tone +
-                    </button>
-                  )}
-                  {isLengthExist ? (
-                    <div>
-                      <select
-                        value={selectedLength}
-                        onChange={handleLegthOption}
-                      >
-                        <option value="short">Short</option>
-                        <option value="medium">Medium</option>
-                        <option value="long">Long</option>
-                      </select>
-                      <button onClick={handleLength}>X</button>
-                    </div>
-                  ) : (
-                    <button className="btn" onClick={handleLength}>
-                      Length +
-                    </button>
-                  )}
-                </div>
-                <div onClick={handleChat}>
-                  <MdOutlineSend className="send-btn" size={20} />
+              <div className="textarea-filter">
+                <textarea
+                  ref={textareaRef}
+                  onInput={handleInput}
+                  value={question}
+                  className="text-area"
+                  id="myTextarea"
+                  placeholder="Type something..."
+                  onChange={(e) => setQuestion(e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(e)}
+                ></textarea>
+                <div className="search-div">
+                  <div className="type">
+                    {isTypeExist ? (
+                      <div>
+                        <select ref={selectRef}>
+                          <option value="reasoning">reasoning</option>
+                        </select>
+                        <button onClick={handleType}>X</button>
+                      </div>
+                    ) : (
+                      <button className="btn" onClick={handleType}>
+                        Type +
+                      </button>
+                    )}
+                    {isToneExist ? (
+                      <div>
+                        <select
+                          value={selectedTone}
+                          onChange={handleToneOption}
+                        >
+                          <option value="profesional">profesional</option>
+                          <option value="casual">casual</option>
+                          <option value="straightforward">
+                            straightforward
+                          </option>
+                          <option value="confident">confident</option>
+                          <option value="friendly">friendly</option>
+                        </select>
+                        <button onClick={handleTone}>X</button>
+                      </div>
+                    ) : (
+                      <button className="btn" onClick={handleTone}>
+                        Change tone +
+                      </button>
+                    )}
+                    {isLengthExist ? (
+                      <div>
+                        <select
+                          value={selectedLength}
+                          onChange={handleLegthOption}
+                        >
+                          <option value="short">Short</option>
+                          <option value="medium">Medium</option>
+                          <option value="long">Long</option>
+                        </select>
+                        <button onClick={handleLength}>X</button>
+                      </div>
+                    ) : (
+                      <button className="btn" onClick={handleLength}>
+                        Length +
+                      </button>
+                    )}
+                  </div>
+                  <div onClick={handleChat}>
+                    <MdOutlineSend className="send-btn" size={18} />
+                  </div>
                 </div>
               </div>
             </div>

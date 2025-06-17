@@ -22,13 +22,8 @@ body {
   cursor: pointer;
 }
 
-/* .stich-div {
-  border-right: 1px solid red;
-} */
-
 .header {
   display: flex;
-  /* border-bottom: 1px solid red; */
   justify-content: space-between;
   align-items: center;
   width: 100%;
@@ -94,9 +89,8 @@ body {
 
 .text-area-div {
   margin-top: 10px;
-  position: relative;
+  /* position: relative; */
   width: 100%;
-  height: 23.6rem;
 }
 
 .text-area {
@@ -105,34 +99,42 @@ body {
   border-radius: 5px;
   padding: 10px;
   font-size: 16px;
-  min-height: 60px;
-  position: absolute;
+  min-height: 50px;
   bottom: 0px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.textarea-filter {
+  position: relative;
 }
 
 .chatbot-div {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 18rem;
+  align-items: end;
+  max-height: 20rem;
   overflow-y: scroll;
 }
 
+.chatbot-div::-webkit-scrollbar {
+  display: none;
+}
+
 .user-message {
-  background-color: #e9e9e9;
+  background: white;
+  border: #1955db solid 1px;
   border-radius: 50px;
-  margin-bottom: 10px;
-  font-size: 12px;
-  align-items: end;
-  padding: 2px 10px;
+  margin-bottom: 20px;
+  font-size: 10px;
+  padding: 0px 20px;
   width: fit-content;
   max-width: 15rem;
   font-size: 12px;
 }
 
 .bot-message {
-  background-color: #f0f0f0;
+  background: white;
   padding: 5px 10px;
   border-radius: 5px;
   margin-bottom: 10px;
@@ -188,16 +190,16 @@ body {
 }
 
 .btn {
-  background-color: #1955db; /* Green */
+  background-color: #1955db;
   border: none;
   color: white;
-  padding: 6px 16px;
+  padding: 5px 12px;
   border-radius: 5px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 10px;
 }
 
 .send-btn {
