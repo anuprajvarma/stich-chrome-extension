@@ -32,6 +32,11 @@ function App() {
   );
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]); // Scrolls when messages change
 
   const handleCopy = async () => {
     if (textRef.current) {
@@ -349,6 +354,7 @@ function App() {
                     )}
                     <Tooltip id="my-tooltip" />
                   </div>
+                  <div ref={bottomRef} />
                 </div>
               ))}
             </div>
