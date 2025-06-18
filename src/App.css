@@ -16,6 +16,8 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width: 100%;
+  /* align-items: end; */
   margin-bottom: 10px;
 }
 
@@ -113,7 +115,7 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  align-items: end;
+  /* align-items: end; */
   max-height: 20rem;
   overflow-y: scroll;
 }
@@ -127,10 +129,11 @@ body {
   /* border: #1955db solid 1px; */
   border-radius: 50px;
   font-size: 10px;
-  padding: 0px 20px;
+  padding: 2px 20px;
   width: fit-content;
   max-width: 15rem;
   font-size: 12px;
+  /* align-items: end; */
 }
 
 .bot-message {
@@ -139,6 +142,8 @@ body {
   border-radius: 5px;
   margin-bottom: 10px;
   font-size: 12px;
+  width: 100%;
+  /* align-items: start; */
 }
 
 .text-area:focus {

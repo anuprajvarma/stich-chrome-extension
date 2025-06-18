@@ -172,13 +172,13 @@ function App() {
       console.log("Please enter a question.");
       return;
     }
-
+    setCopy(false);
     const userMsg = { sender: "user", text: question };
     setMessages((prev) => [...prev, userMsg]);
     setQuestion("");
 
     try {
-      console.log(`tone ${selectedTone} length ${selectedLength}`);
+      // console.log(`tone ${selectedTone} length ${selectedLength}`);
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -293,30 +293,53 @@ function App() {
             <div className="chatbot-div">
               {messages.map((msg, index) => (
                 <div className="chatbot">
-                  <div
-                    ref={textRef}
-                    style={{ whiteSpace: "pre-wrap" }}
-                    key={index}
-                    className={`message ${
-                      msg.sender === "user" ? "user-message" : "bot-message"
-                    }`}
-                  >
-                    {msg.text ? (
-                      <ReactMarkdown>{msg.text}</ReactMarkdown>
-                    ) : (
+                  {msg.text ? (
+                    <div
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        alignItems:
+                          msg.sender === "user" ? "flex-end" : "flex-start", // use correct values
+                        justifyContent: msg.sender === "user" ? "end" : "start", // probably what you meant instead of justifyItems
+                      }}
+                    >
+                      <div
+                        ref={textRef}
+                        key={index}
+                        className={`message ${
+                          msg.sender === "user" ? "user-message" : "bot-message"
+                        }`}
+                      >
+                        <ReactMarkdown>{msg.text}</ReactMarkdown>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        background: "white",
+                        padding: "2px 20px",
+                        width: "fit-content",
+                        borderRadius: "50px",
+                      }}
+                    >
                       <p>searching...</p>
-                    )}
-                  </div>
+                    </div>
+                  )}
                   <div>
                     {msg.sender === "user" ? (
                       <></>
                     ) : msg.text ? (
                       copy ? (
                         <FaRegCopy
+                          size={15}
                           data-tooltip-id="my-tooltip"
-                          data-tooltip-content="copy text"
+                          data-tooltip-content="Copy"
                           onClick={handleCopy}
-                          style={{ cursor: "pointer" }}
+                          style={{
+                            cursor: "pointer",
+                            border: "none",
+                            outline: "none",
+                          }}
                         />
                       ) : (
                         <></>
@@ -336,7 +359,7 @@ function App() {
                 value={question}
                 className="text-area"
                 id="myTextarea"
-                placeholder="Type something..."
+                placeholder="Ask anything"
                 onChange={(e) => setQuestion(e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e)}
               ></textarea>
