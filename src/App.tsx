@@ -5,7 +5,9 @@ import ReactMarkdown from "react-markdown";
 import { FaRegCopy } from "react-icons/fa6";
 import { MdOutlineDeleteOutline } from "react-icons/md";
 import "react-tooltip/dist/react-tooltip.css";
+import { GiSpeaker } from "react-icons/gi";
 import { Tooltip } from "react-tooltip";
+import { IoStopCircleOutline } from "react-icons/io5";
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 // const email = import.meta.env.VITE_MY_EMAIL;
 // const google_apiKey = import.meta.env.VITE_API_KEY;
@@ -17,6 +19,7 @@ function App() {
   const [selectedTone, setSelectedTone] = useState("");
   const [question, setQuestion] = useState("");
   const [copy, setCopy] = useState(false);
+  const [speak, setSpeak] = useState(true);
   // const [contextExists, setContextExists] = useState(false);
   // const [isAskAIActive, setIsAskAIActive] = useState(true);
   // const [context, setContext] = useState("");
@@ -57,9 +60,23 @@ function App() {
     }
   };
 
+  const handleSpeak = () => {
+    speakText(messages[1].text);
+    setSpeak(false);
+  };
+
   // const onclose = () => {
   //   window.parent.postMessage({ type: "REMOVE_IFRAME" }, "*");
   // };
+
+  const speakText = (text: string) => {
+    console.log("Speaking text:", text);
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US"; // Change language if needed
+    utterance.rate = 1; // Speed (0.1 to 10)
+    utterance.pitch = 1; // Pitch (0 to 2)
+    speechSynthesis.speak(utterance);
+  };
 
   useEffect(() => {
     console.log("app mount ho gya");
@@ -325,34 +342,81 @@ function App() {
                         padding: "2px 20px",
                         width: "fit-content",
                         borderRadius: "50px",
+                        font: "12px",
                       }}
                     >
                       <p>searching...</p>
                     </div>
                   )}
-                  <div>
-                    {msg.sender === "user" ? (
-                      <></>
-                    ) : msg.text ? (
-                      copy ? (
-                        <FaRegCopy
-                          size={15}
-                          data-tooltip-id="my-tooltip"
-                          data-tooltip-content="Copy"
-                          onClick={handleCopy}
-                          style={{
-                            cursor: "pointer",
-                            border: "none",
-                            outline: "none",
-                          }}
-                        />
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <>
+                      {msg.sender === "user" ? (
+                        <></>
+                      ) : msg.text ? (
+                        copy ? (
+                          <FaRegCopy
+                            size={15}
+                            data-tooltip-id="copy-text"
+                            data-tooltip-content="Copy"
+                            onClick={handleCopy}
+                            style={{
+                              cursor: "pointer",
+                              border: "none",
+                              outline: "none",
+                            }}
+                          />
+                        ) : (
+                          <></>
+                        )
                       ) : (
                         <></>
-                      )
-                    ) : (
-                      <></>
-                    )}
-                    <Tooltip id="my-tooltip" />
+                      )}
+                      <Tooltip id="copy-text" />
+                    </>
+                    <>
+                      {msg.sender === "user" ? (
+                        <></>
+                      ) : msg.text ? (
+                        copy ? (
+                          speak ? (
+                            <GiSpeaker
+                              size={18}
+                              data-tooltip-id="speak-text"
+                              data-tooltip-content="voice"
+                              onClick={handleSpeak}
+                              style={{
+                                cursor: "pointer",
+                                border: "none",
+                                outline: "none",
+                              }}
+                            />
+                          ) : (
+                            <>
+                              <IoStopCircleOutline
+                                size={18}
+                                data-tooltip-id="stop-text"
+                                data-tooltip-content="stop"
+                                onClick={() => {
+                                  speechSynthesis.cancel();
+                                  setSpeak(true);
+                                }}
+                                style={{
+                                  cursor: "pointer",
+                                  border: "none",
+                                  outline: "none",
+                                }}
+                              />
+                              <Tooltip id="stop-text" />
+                            </>
+                          )
+                        ) : (
+                          <></>
+                        )
+                      ) : (
+                        <></>
+                      )}
+                      <Tooltip id="speak-text" />
+                    </>
                   </div>
                   <div ref={bottomRef} />
                 </div>
