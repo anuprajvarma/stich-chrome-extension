@@ -2,19 +2,19 @@
 
 Stich is a chrome extension, with stich you don't need to switch tabs for using AI you can use this on any site instantly.
 
-## Screenshots
-
-![Course Page](./client/public/course-page.png)
-
-![Dashborad Page](./client/public/dashboard.png)
-
-![Courses Page](./client/public/courses.png)
-
 ## Tech Stack
 
 - [React.js](https://react.dev/)
 - [Typescript](https://www.typescriptlang.org/)
 - [DeepSeek API](https://api-docs.deepseek.com/)
+
+## Screenshots
+
+![Course Page](./images/image3.png)
+
+![Dashborad Page](./images/image2.png)
+
+![Courses Page](./images/image1.png)
 
 # Configuration and running the Project
 
@@ -23,6 +23,8 @@ Stich is a chrome extension, with stich you don't need to switch tabs for using 
 <pre>
     git clone `https://github.com/anuprajvarma/cape.git`
 </pre>
+
+## Configuration
 
 <pre>
     npm install
