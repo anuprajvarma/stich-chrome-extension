@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-// import { RiPlayListAddLine } from "react-icons/ri";
 import { MdOutlineSend } from "react-icons/md";
 import ReactMarkdown from "react-markdown";
 import { FaRegCopy } from "react-icons/fa6";
@@ -9,9 +8,6 @@ import { GiSpeaker } from "react-icons/gi";
 import { Tooltip } from "react-tooltip";
 import { IoStopCircleOutline } from "react-icons/io5";
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
-// const email = import.meta.env.VITE_MY_EMAIL;
-// const google_apiKey = import.meta.env.VITE_API_KEY;
-import "./App.css";
 
 function App() {
   const selectRef = useRef<HTMLSelectElement>(null);
@@ -282,14 +278,14 @@ function App() {
 
   return (
     <>
-      <div className="top-div">
-        <div className="wrap-div">
-          <div className="header">
-            <div className="stich">
+      <div className="flex flex-col">
+        <div className="w-96">
+          <div className="flex justify-between w-full items-center">
+            <div className="flex items-center gap-1">
               <div className="stich-div">
                 <img src="icon.png" width={20} height={20} />
               </div>
-              <p className="stich-title">Stich</p>
+              <p className="font-bold text-2xl">Stich</p>
             </div>
           </div>
           {/* <div>
@@ -311,10 +307,13 @@ function App() {
             )}
           </div> */}
 
-          <div className="text-area-div">
-            <div className="chatbot-div">
+          <div className="mt-2.5 w-full">
+            <div className="flex flex-col w-full max-h-80 overflow-y-scroll">
               {messages.map((msg, index) => (
-                <div className="chatbot">
+                <div
+                  key={index}
+                  className="flex flex-col gap-2.5 w-full mb-2.5"
+                >
                   {msg.text ? (
                     <div
                       style={{
@@ -329,7 +328,9 @@ function App() {
                         ref={textRef}
                         key={index}
                         className={`message ${
-                          msg.sender === "user" ? "user-message" : "bot-message"
+                          msg.sender === "user"
+                            ? "bg-white rounded-full text-[12px] py-0.5 px-5 w-fit max-w-60"
+                            : "bg-white px-2.5 py-1.5 rounded mb-2.5 text-[12px] w-full"
                         }`}
                       >
                         <ReactMarkdown>{msg.text}</ReactMarkdown>
@@ -422,21 +423,25 @@ function App() {
                 </div>
               ))}
             </div>
-            <div className="textarea-filter">
+            <div className="relative">
               <textarea
                 ref={textareaRef}
                 onInput={handleInput}
                 value={question}
-                className="text-area"
+                className="w-full border border-gray-300 rounded p-2.5 text-base h-full shadow-sm"
                 id="myTextarea"
                 placeholder="Ask anything"
                 onChange={(e) => setQuestion(e.target.value)}
                 onKeyDown={(e) => handleKeyDown(e)}
               ></textarea>
-              <div className="search-div">
-                <div className="type">
+              <div className="flex items-center absolute bottom-2.5 justify-between w-[96%] gap-2 ">
+                <div className="flex">
                   <button
-                    className={`${isTypeExist ? "selected-reasoning" : "btn"}`}
+                    className={`${
+                      isTypeExist
+                        ? "text-[#1955db] px-3 py-1.5 rounded text-center no-underline inline-block cursor-pointer text-[12px]"
+                        : "border-none px-3 py-1.5 rounded text-center no-underline inline-block cursor-pointer text-[12px]"
+                    }`}
                     onClick={() => setIsTypeExist(!isTypeExist)}
                   >
                     Reasoning
@@ -454,7 +459,7 @@ function App() {
                     </button>
                   )} */}
                   {isToneExist ? (
-                    <div className="tone-div">
+                    <div className="flex items-center justify-center">
                       <select value={selectedTone} onChange={handleToneOption}>
                         <option value="profesional">profesional</option>
                         <option value="casual">casual</option>
@@ -469,12 +474,15 @@ function App() {
                       />
                     </div>
                   ) : (
-                    <button className="btn" onClick={handleTone}>
+                    <button
+                      className="border-none px-3 py-1.5 rounded text-center no-underline inline-block cursor-pointer text-[12px]"
+                      onClick={handleTone}
+                    >
                       Change tone +
                     </button>
                   )}
                   {isLengthExist ? (
-                    <div className="lenght-div">
+                    <div className="flex items-center justify-center">
                       <select
                         value={selectedLength}
                         onChange={handleLegthOption}
@@ -491,13 +499,19 @@ function App() {
                       />
                     </div>
                   ) : (
-                    <button className="btn" onClick={handleLength}>
+                    <button
+                      className="border-none px-3 py-1.5 rounded text-center no-underline inline-block cursor-pointer text-[12px]"
+                      onClick={handleLength}
+                    >
                       Length +
                     </button>
                   )}
                 </div>
                 <div onClick={handleChat}>
-                  <MdOutlineSend className="send-btn" size={18} />
+                  <MdOutlineSend
+                    className="border-none text-[#1955db] cursor-pointer"
+                    size={18}
+                  />
                 </div>
               </div>
             </div>
