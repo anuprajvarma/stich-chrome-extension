@@ -126,3 +126,43 @@
 //     if (iframe) iframe.remove();
 //   }
 // });
+
+// src/contentScript.tsx
+// import tailwindCss from "./index.css?inline"; // using vite raw import
+// import { ChatButton } from "./ChatBot";
+// import { createRoot } from "react-dom/client";
+
+// // 1️⃣ Create a container on the webpage
+// const host = document.createElement("div");
+// document.body.appendChild(host);
+
+// // 2️⃣ Create a Shadow Root to isolate styles
+// const shadow = host.attachShadow({ mode: "open" });
+
+// // 3️⃣ Inject Tailwind CSS into the shadow root
+// const style = document.createElement("style");
+// style.textContent = tailwindCss;
+// shadow.appendChild(style);
+
+// // 4️⃣ Create root element for React
+// const rootDiv = document.createElement("div");
+// shadow.appendChild(rootDiv);
+
+// // 5️⃣ Render React app inside the shadow root
+// createRoot(rootDiv).render(<ChatButton />);
+
+import "./index.css";
+
+import { createRoot } from "react-dom/client";
+import { StrictMode } from "react";
+import { ChatButton } from "./ChatBot";
+
+const root = document.createElement("div");
+root.id = "__leetcode_ai_whisper_container";
+document.body.append(root);
+
+createRoot(root).render(
+  <StrictMode>
+    <ChatButton />
+  </StrictMode>
+);

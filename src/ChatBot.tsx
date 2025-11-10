@@ -1,31 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import { MdOutlineSend } from "react-icons/md";
 import ReactMarkdown from "react-markdown";
 import { FaRegCopy } from "react-icons/fa6";
-import { MdOutlineDeleteOutline } from "react-icons/md";
 import "react-tooltip/dist/react-tooltip.css";
 import { GiSpeaker } from "react-icons/gi";
 import { Tooltip } from "react-tooltip";
 import { IoStopCircleOutline } from "react-icons/io5";
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 
-function App() {
+export const ChatButton = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLSelectElement>(null);
-  const [selectedLength, setSelectedLength] = useState("");
-  const [selectedTone, setSelectedTone] = useState("");
   const [question, setQuestion] = useState("");
   const [copy, setCopy] = useState(false);
   const [speak, setSpeak] = useState(true);
-  // const [contextExists, setContextExists] = useState(false);
-  // const [isAskAIActive, setIsAskAIActive] = useState(true);
-  // const [context, setContext] = useState("");
-  // const [translate1, setTranslate1] = useState("en");
-  // const [translate2, setTranslate2] = useState("zh-TW");
-  // const [translateText, setTranslateText] = useState("");
-  // const [isTranslateActive, setIsTranslateActive] = useState(false);
   const [isTypeExist, setIsTypeExist] = useState(false);
-  const [isLengthExist, setIsLengthExist] = useState(false);
-  const [isToneExist, setIsToneExist] = useState(false);
   const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
     []
   );
@@ -35,7 +23,7 @@ function App() {
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]); // Scrolls when messages change
+  }, [messages]);
 
   const handleCopy = async () => {
     if (textRef.current) {
@@ -61,16 +49,12 @@ function App() {
     setSpeak(false);
   };
 
-  // const onclose = () => {
-  //   window.parent.postMessage({ type: "REMOVE_IFRAME" }, "*");
-  // };
-
   const speakText = (text: string) => {
     console.log("Speaking text:", text);
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US"; // Change language if needed
-    utterance.rate = 1; // Speed (0.1 to 10)
-    utterance.pitch = 1; // Pitch (0 to 2)
+    utterance.lang = "en-US";
+    utterance.rate = 1;
+    utterance.pitch = 1;
     speechSynthesis.speak(utterance);
   };
 
@@ -80,40 +64,12 @@ function App() {
       console.log("📩 React got message:", event.data);
       if (event.data?.type === "PASS_TEXT") {
         console.log("🧠 Received from content.js:", event.data.payload);
-        // setContextExists(true);
-        // setContext(event.data.payload);
       }
     };
 
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
   }, []);
-
-  // useEffect(() => {
-  //   const callTranslatorAPI = async () => {
-  //     console.log(
-  //       "Calling translator API with context:",
-  //       translate1 + context + translate2 + email
-  //     );
-  //     const res = await fetch(
-  //       `https://api.mymemory.translated.net/get?q=${encodeURIComponent(
-  //         context
-  //       )}&langpair=${translate1}|${translate2}&de=${email}`
-  //     );
-  //     const data = await res.json();
-  //     console.log("Translation data:", data);
-  //     setTranslateText(data.matches[0].translation);
-  //     console.log("Translation result:", data.matches[0].translation);
-  //   };
-  //   if (
-  //     context !== "" &&
-  //     translate1 &&
-  //     translate2 &&
-  //     translate1 !== translate2
-  //   ) {
-  //     callTranslatorAPI();
-  //   }
-  // }, [context, translate1, translate2]);
 
   useEffect(() => {
     if (selectRef.current) {
@@ -133,58 +89,6 @@ function App() {
     }
   };
 
-  const handleLength = () => {
-    setIsLengthExist(!isLengthExist);
-    setSelectedLength("short");
-  };
-
-  // const handleContext = () => {
-  //   // setContext("");
-  //   // setTranslateText("");
-  //   setContextExists(!contextExists);
-  // };
-
-  // const handleAskAI = () => {
-  //   setIsAskAIActive(true);
-  // };
-
-  // const handleTranslate = () => {
-  //   setIsAskAIActive(false);
-  // };
-
-  // const handleImroveWriting = () => {};
-
-  const handleTone = () => {
-    setIsToneExist(!isToneExist);
-    setSelectedTone("profesional");
-  };
-
-  // const handleTranslateOption1 = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   setTranslate1(e.target.value);
-  // };
-
-  // const handleTranslateOption2 = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   setTranslate2(e.target.value);
-  // };
-
-  // const handleType = () => {
-  //   setIsTypeExist(!isTypeExist);
-  // };
-
-  const handleLegthOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedLength(e.target.value);
-    console.log("Selected:", e.target.value);
-  };
-
-  const handleToneOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedTone(e.target.value);
-    console.log("Selected tone:", e.target.value);
-  };
-
-  // const handleContextInput = (value: string) => {
-  //   setContext(value);
-  // };
-
   const handleChat = async () => {
     if (question.trim() === "") {
       console.log("Please enter a question.");
@@ -196,7 +100,6 @@ function App() {
     setQuestion("");
 
     try {
-      // console.log(`tone ${selectedTone} length ${selectedLength}`);
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -209,7 +112,7 @@ function App() {
           messages: [
             {
               role: "system",
-              content: `You are a helpful assistant. Respond in a ${selectedLength} formatwith a ${selectedTone} tone.`,
+              content: `You are a helpful assistant. Respond in long and detail formate and in english`,
             },
             {
               role: "user",
@@ -278,42 +181,33 @@ function App() {
 
   return (
     <>
-      <div className="flex flex-col w-100">
-        <div className="w-full">
-          <div className="flex justify-between w-full items-center">
-            <div className="flex items-center gap-1">
-              <div className="stich-div">
-                <img src="icon.png" width={20} height={20} />
-              </div>
-              <p className="font-bold text-2xl">Stich</p>
-            </div>
-          </div>
-          {/* <div>
-            {contextExists ? (
-              <div>
-                <input
-                  value={context}
-                  onChange={(e) => handleContextInput(e.target.value)}
-                />
-                <button onClick={handleContext}>
-                  <MdOutlineDeleteOutline />
-                </button>
-              </div>
-            ) : (
-              <button className="addContext-btn" onClick={handleContext}>
-                <RiPlayListAddLine />
-                <p>Add Context</p>
-              </button>
-            )}
-          </div> */}
-
-          <div className="mt-2.5 w-full">
-            <div className="flex flex-col w-full max-h-80 overflow-y-scroll">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="
+          fixed bottom-4 left-4
+          rounded-full 
+          flex items-center justify-center
+          shadow-lg
+          transition-all duration-300
+          cursor-pointer
+          z-50
+        "
+      >
+        Ask me
+      </button>
+      {isOpen && (
+        <div
+          className="flex flex-col fixed bottom-14 left-5 p-2
+          rounded-lg w-100 h-11/12
+           items-center justify-center
+          shadow-lg bg-[#212121]
+          transition-all duration-300
+          z-50"
+        >
+          <div className="flex w-full h-full overflow-y-scroll scrollbar-none">
+            <div className="flex flex-col w-full h-full py-4">
               {messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col gap-2.5 w-full mb-2.5"
-                >
+                <div key={index} className="flex flex-col gap-2.5 w-full">
                   {msg.text ? (
                     <div
                       style={{
@@ -329,23 +223,15 @@ function App() {
                         key={index}
                         className={`message ${
                           msg.sender === "user"
-                            ? "bg-white rounded-full text-[12px] py-0.5 px-5 w-fit max-w-60"
-                            : "bg-white px-2.5 py-1.5 rounded mb-2.5 text-[12px] w-full"
+                            ? "bg-[#303030] rounded-full text-[12px] py-2 px-4 w-fit max-w-60"
+                            : "bg-[#303030] px-2.5 py-1.5 rounded mb-2.5 text-[12px] w-full"
                         }`}
                       >
                         <ReactMarkdown>{msg.text}</ReactMarkdown>
                       </div>
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        background: "white",
-                        padding: "2px 20px",
-                        width: "fit-content",
-                        borderRadius: "50px",
-                        font: "12px",
-                      }}
-                    >
+                    <div className="bg-[#303030] px-4 py-2 rounded-full text-[12px] w-fit">
                       <p>searching...</p>
                     </div>
                   )}
@@ -374,7 +260,7 @@ function App() {
                       )}
                       <Tooltip id="copy-text" />
                     </>
-                    <>
+                    <div>
                       {msg.sender === "user" ? (
                         <></>
                       ) : msg.text ? (
@@ -417,24 +303,25 @@ function App() {
                         <></>
                       )}
                       <Tooltip id="speak-text" />
-                    </>
+                    </div>
                   </div>
                   <div ref={bottomRef} />
                 </div>
               ))}
             </div>
-            <div className="relative">
-              <textarea
-                ref={textareaRef}
-                onInput={handleInput}
-                value={question}
-                className="w-full border border-gray-300 rounded p-2.5 text-base h-full shadow-sm"
-                id="myTextarea"
-                placeholder="Ask anything"
-                onChange={(e) => setQuestion(e.target.value)}
-                onKeyDown={(e) => handleKeyDown(e)}
-              ></textarea>
-              <div className="flex items-center absolute bottom-2.5 justify-between w-[96%] gap-2 ">
+          </div>
+          <div className="w-full bg-[#303030] rounded-2xl">
+            <textarea
+              ref={textareaRef}
+              onInput={handleInput}
+              value={question}
+              className="w-full border-none outline-none rounded-2xl p-2 text-base"
+              id="myTextarea"
+              placeholder="Ask anything"
+              onChange={(e) => setQuestion(e.target.value)}
+              onKeyDown={(e) => handleKeyDown(e)}
+            ></textarea>
+            {/* <div className="flex items-center absolute bottom-2.5 justify-between w-[96%] gap-2 ">
                 <div className="flex">
                   <button
                     className={`${
@@ -446,66 +333,6 @@ function App() {
                   >
                     Reasoning
                   </button>
-                  {/* {isTypeExist ? (
-                    <div>
-                      <select ref={selectRef}>
-                        <option value="reasoning">reasoning</option>
-                      </select>
-                      <button onClick={handleType}>X</button>
-                    </div>
-                  ) : (
-                    <button className="btn" onClick={handleType}>
-                      Type +
-                    </button>
-                  )} */}
-                  {isToneExist ? (
-                    <div className="flex items-center justify-center">
-                      <select value={selectedTone} onChange={handleToneOption}>
-                        <option value="profesional">profesional</option>
-                        <option value="casual">casual</option>
-                        <option value="straightforward">straightforward</option>
-                        <option value="confident">confident</option>
-                        <option value="friendly">friendly</option>
-                      </select>
-                      <MdOutlineDeleteOutline
-                        style={{ cursor: "pointer" }}
-                        size={18}
-                        onClick={handleTone}
-                      />
-                    </div>
-                  ) : (
-                    <button
-                      className="border-none px-3 py-1.5 rounded text-center no-underline inline-block cursor-pointer text-[12px]"
-                      onClick={handleTone}
-                    >
-                      Change tone +
-                    </button>
-                  )}
-                  {isLengthExist ? (
-                    <div className="flex items-center justify-center">
-                      <select
-                        value={selectedLength}
-                        onChange={handleLegthOption}
-                      >
-                        <option value="short">Short</option>
-                        <option value="medium">Medium</option>
-                        <option value="long">Long</option>
-                      </select>
-
-                      <MdOutlineDeleteOutline
-                        style={{ cursor: "pointer" }}
-                        size={18}
-                        onClick={handleLength}
-                      />
-                    </div>
-                  ) : (
-                    <button
-                      className="border-none px-3 py-1.5 rounded text-center no-underline inline-block cursor-pointer text-[12px]"
-                      onClick={handleLength}
-                    >
-                      Length +
-                    </button>
-                  )}
                 </div>
                 <div onClick={handleChat}>
                   <MdOutlineSend
@@ -513,13 +340,10 @@ function App() {
                     size={18}
                   />
                 </div>
-              </div>
-            </div>
+              </div> */}
           </div>
         </div>
-      </div>
+      )}
     </>
   );
-}
-
-export default App;
+};
