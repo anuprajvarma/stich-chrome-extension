@@ -185,7 +185,7 @@ export const ChatButton = () => {
         onClick={() => setIsOpen(!isOpen)}
         className="
           fixed bottom-4 left-4
-          rounded-full 
+          rounded-2xl 
           flex items-center justify-center
           shadow-lg
           transition-all duration-300
@@ -197,8 +197,8 @@ export const ChatButton = () => {
       </button>
       {isOpen && (
         <div
-          className="flex flex-col fixed bottom-14 left-5 p-2
-          rounded-lg w-100 h-11/12
+          className="flex flex-col fixed bottom-14 left-4 pb-3 px-2
+          rounded-t-2xl w-100 h-11/12
            items-center justify-center
           shadow-lg bg-[#212121]
           transition-all duration-300
@@ -223,15 +223,15 @@ export const ChatButton = () => {
                         key={index}
                         className={`message ${
                           msg.sender === "user"
-                            ? "bg-[#303030] rounded-full text-[12px] py-2 px-4 w-fit max-w-60"
-                            : "bg-[#303030] px-2.5 py-1.5 rounded mb-2.5 text-[12px] w-full"
+                            ? "bg-[#303030] rounded-2xl text-[12px] py-2 px-4 w-fit max-w-60"
+                            : "bg-[#303030] px-2.5 py-1.5 rounded-2xl mb-2.5 text-[12px] w-full"
                         }`}
                       >
                         <ReactMarkdown>{msg.text}</ReactMarkdown>
                       </div>
                     </div>
                   ) : (
-                    <div className="bg-[#303030] px-4 py-2 rounded-full text-[12px] w-fit">
+                    <div className="bg-[#303030] px-4 py-2 rounded-2xl text-[12px] w-fit">
                       <p>searching...</p>
                     </div>
                   )}
@@ -310,12 +310,13 @@ export const ChatButton = () => {
               ))}
             </div>
           </div>
-          <div className="w-full bg-[#303030] rounded-2xl">
+          <div className="w-full bg-[#303030] rounded-3xl">
             <textarea
               ref={textareaRef}
               onInput={handleInput}
               value={question}
-              className="w-full border-none outline-none rounded-2xl p-2 text-base"
+              rows={1}
+              className="w-full border-none outline-none rounded-3xl px-3 py-2 resize-none"
               id="myTextarea"
               placeholder="Ask anything"
               onChange={(e) => setQuestion(e.target.value)}
