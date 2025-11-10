@@ -185,10 +185,10 @@ export const ChatButton = () => {
         onClick={() => setIsOpen(!isOpen)}
         className="
           fixed bottom-4 left-4
-          rounded-2xl 
-          flex items-center justify-center
+          rounded-lg 
+          flex items-center justify-center font-semibold
           shadow-lg
-          transition-all duration-300
+          transition-all duration-300 bg-[#303030] px-4 py-2
           cursor-pointer
           z-50
         "
@@ -205,72 +205,49 @@ export const ChatButton = () => {
           z-50"
         >
           <div className="flex w-full h-full overflow-y-scroll scrollbar-none">
-            <div className="flex flex-col w-full h-full py-4">
-              {messages.map((msg, index) => (
-                <div key={index} className="flex flex-col gap-2.5 w-full">
-                  {msg.text ? (
-                    <div
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        alignItems:
-                          msg.sender === "user" ? "flex-end" : "flex-start", // use correct values
-                        justifyContent: msg.sender === "user" ? "end" : "start", // probably what you meant instead of justifyItems
-                      }}
-                    >
+            {messages.length > 0 ? (
+              <div className="flex flex-col w-full h-full py-4">
+                {messages.map((msg, index) => (
+                  <div key={index} className="flex flex-col gap-2.5 w-full">
+                    {msg.text ? (
                       <div
-                        ref={textRef}
-                        key={index}
-                        className={`message ${
-                          msg.sender === "user"
-                            ? "bg-[#303030] rounded-2xl text-[12px] py-2 px-4 w-fit max-w-60"
-                            : "bg-[#303030] px-2.5 py-1.5 rounded-2xl mb-2.5 text-[12px] w-full"
-                        }`}
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          alignItems:
+                            msg.sender === "user" ? "flex-end" : "flex-start", // use correct values
+                          justifyContent:
+                            msg.sender === "user" ? "end" : "start", // probably what you meant instead of justifyItems
+                        }}
                       >
-                        <ReactMarkdown>{msg.text}</ReactMarkdown>
+                        <div
+                          ref={textRef}
+                          key={index}
+                          className={`message ${
+                            msg.sender === "user"
+                              ? "bg-[#303030] rounded-2xl text-[12px] py-2 px-4 w-fit max-w-60"
+                              : "bg-[#303030] px-2.5 py-1.5 rounded-2xl mb-2.5 text-[12px] w-full"
+                          }`}
+                        >
+                          <ReactMarkdown>{msg.text}</ReactMarkdown>
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="bg-[#303030] px-4 py-2 rounded-2xl text-[12px] w-fit">
-                      <p>searching...</p>
-                    </div>
-                  )}
-                  <div style={{ display: "flex", gap: "10px" }}>
-                    <>
-                      {msg.sender === "user" ? (
-                        <></>
-                      ) : msg.text ? (
-                        copy ? (
-                          <FaRegCopy
-                            size={15}
-                            data-tooltip-id="copy-text"
-                            data-tooltip-content="Copy"
-                            onClick={handleCopy}
-                            style={{
-                              cursor: "pointer",
-                              border: "none",
-                              outline: "none",
-                            }}
-                          />
-                        ) : (
+                    ) : (
+                      <div className="bg-[#303030] px-4 py-2 rounded-2xl text-[12px] w-fit">
+                        <p>searching...</p>
+                      </div>
+                    )}
+                    <div style={{ display: "flex", gap: "10px" }}>
+                      <>
+                        {msg.sender === "user" ? (
                           <></>
-                        )
-                      ) : (
-                        <></>
-                      )}
-                      <Tooltip id="copy-text" />
-                    </>
-                    <div>
-                      {msg.sender === "user" ? (
-                        <></>
-                      ) : msg.text ? (
-                        copy ? (
-                          speak ? (
-                            <GiSpeaker
-                              size={18}
-                              data-tooltip-id="speak-text"
-                              data-tooltip-content="voice"
-                              onClick={handleSpeak}
+                        ) : msg.text ? (
+                          copy ? (
+                            <FaRegCopy
+                              size={15}
+                              data-tooltip-id="copy-text"
+                              data-tooltip-content="Copy"
+                              onClick={handleCopy}
                               style={{
                                 cursor: "pointer",
                                 border: "none",
@@ -278,37 +255,67 @@ export const ChatButton = () => {
                               }}
                             />
                           ) : (
-                            <>
-                              <IoStopCircleOutline
+                            <></>
+                          )
+                        ) : (
+                          <></>
+                        )}
+                        <Tooltip id="copy-text" />
+                      </>
+                      <div>
+                        {msg.sender === "user" ? (
+                          <></>
+                        ) : msg.text ? (
+                          copy ? (
+                            speak ? (
+                              <GiSpeaker
                                 size={18}
-                                data-tooltip-id="stop-text"
-                                data-tooltip-content="stop"
-                                onClick={() => {
-                                  speechSynthesis.cancel();
-                                  setSpeak(true);
-                                }}
+                                data-tooltip-id="speak-text"
+                                data-tooltip-content="voice"
+                                onClick={handleSpeak}
                                 style={{
                                   cursor: "pointer",
                                   border: "none",
                                   outline: "none",
                                 }}
                               />
-                              <Tooltip id="stop-text" />
-                            </>
+                            ) : (
+                              <>
+                                <IoStopCircleOutline
+                                  size={18}
+                                  data-tooltip-id="stop-text"
+                                  data-tooltip-content="stop"
+                                  onClick={() => {
+                                    speechSynthesis.cancel();
+                                    setSpeak(true);
+                                  }}
+                                  style={{
+                                    cursor: "pointer",
+                                    border: "none",
+                                    outline: "none",
+                                  }}
+                                />
+                                <Tooltip id="stop-text" />
+                              </>
+                            )
+                          ) : (
+                            <></>
                           )
                         ) : (
                           <></>
-                        )
-                      ) : (
-                        <></>
-                      )}
-                      <Tooltip id="speak-text" />
+                        )}
+                        <Tooltip id="speak-text" />
+                      </div>
                     </div>
+                    <div ref={bottomRef} />
                   </div>
-                  <div ref={bottomRef} />
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="w-full h-full flex justify-center items-center text-xl font-semibold">
+                <p>What can i help with?</p>
+              </div>
+            )}
           </div>
           <div className="w-full bg-[#303030] rounded-3xl">
             <textarea
