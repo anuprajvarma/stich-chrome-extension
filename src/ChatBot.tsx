@@ -5,6 +5,8 @@ import "react-tooltip/dist/react-tooltip.css";
 import { GiSpeaker } from "react-icons/gi";
 import { Tooltip } from "react-tooltip";
 import { IoStopCircleOutline } from "react-icons/io5";
+import { BotMessageSquare } from "lucide-react";
+
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 
 export const ChatButton = () => {
@@ -186,15 +188,17 @@ export const ChatButton = () => {
         className="
           fixed bottom-4 left-4
           rounded-lg 
-          flex items-center justify-center font-semibold
+          flex gap-1 items-center justify-center font-semibold
           shadow-lg
           transition-all duration-300 bg-[#303030] px-4 py-2
           cursor-pointer
-          z-50
+          z-[99999]
         "
       >
-        Ask me
+        <BotMessageSquare size={25} className="font-semibold" />
+        <p>Ask me</p>
       </button>
+
       {isOpen && (
         <div
           className="flex flex-col fixed bottom-14 left-4 pb-3 px-2
@@ -202,7 +206,7 @@ export const ChatButton = () => {
            items-center justify-center
           shadow-lg bg-[#212121]
           transition-all duration-300
-          z-50"
+          z-[99999]"
         >
           <div className="w-full h-8 flex justify-end items-center text-lg px-2 py-4">
             <button
@@ -337,26 +341,20 @@ export const ChatButton = () => {
               onChange={(e) => setQuestion(e.target.value)}
               onKeyDown={(e) => handleKeyDown(e)}
             ></textarea>
-            {/* <div className="flex items-center absolute bottom-2.5 justify-between w-[96%] gap-2 ">
-                <div className="flex">
-                  <button
-                    className={`${
-                      isTypeExist
-                        ? "text-[#1955db] px-3 py-1.5 rounded text-center no-underline inline-block cursor-pointer text-[12px]"
-                        : "border-none px-3 py-1.5 rounded text-center no-underline inline-block cursor-pointer text-[12px]"
-                    }`}
-                    onClick={() => setIsTypeExist(!isTypeExist)}
-                  >
-                    Reasoning
-                  </button>
-                </div>
-                <div onClick={handleChat}>
-                  <MdOutlineSend
-                    className="border-none text-[#1955db] cursor-pointer"
-                    size={18}
-                  />
-                </div>
-              </div> */}
+            <div className="flex items-center absolute bottom-2.5 justify-between w-[96%] gap-2 ">
+              <div className="flex">
+                <button
+                  className={`${
+                    isTypeExist
+                      ? "text-[#1955db] px-3 py-1.5 rounded text-center no-underline inline-block cursor-pointer text-[12px]"
+                      : "border-none px-3 py-1.5 rounded text-center no-underline inline-block cursor-pointer text-[12px]"
+                  }`}
+                  onClick={() => setIsTypeExist(!isTypeExist)}
+                >
+                  Reasoning
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

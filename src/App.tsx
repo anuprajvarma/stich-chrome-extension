@@ -7,6 +7,7 @@ import "react-tooltip/dist/react-tooltip.css";
 import { GiSpeaker } from "react-icons/gi";
 import { Tooltip } from "react-tooltip";
 import { IoStopCircleOutline } from "react-icons/io5";
+// import botIcon from "./assets/icon.png";
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
 
 function App() {

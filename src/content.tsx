@@ -166,3 +166,11 @@ createRoot(root).render(
     <ChatButton />
   </StrictMode>
 );
+
+// // Create isolated root
+// const host = document.createElement("div");
+// const shadow = host.attachShadow({ mode: "open" });
+// document.body.appendChild(host);
+// const rootDiv = document.createElement("div");
+// shadow.appendChild(rootDiv);
+// createRoot(rootDiv).render(<ChatButton />);

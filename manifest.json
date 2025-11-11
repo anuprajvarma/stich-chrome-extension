@@ -5,7 +5,7 @@
   "description": "Stop switching tabs to chat with AI; use AI on any site instantly. Write emails & messages, fix grammar mistakes, rephrase text, change writing tone, summarize text, and much more using ChatGPT AI. Works on all sites. Free to use.",
   "action": {
     "default_popup": "index.html",
-    "default_icon": "openai.png"
+    "default_icon": "icon.png"
   },
   "permissions": ["scripting", "activeTab", "storage"],
   "host_permissions": ["<all_urls>"],
@@ -18,7 +18,13 @@
   "background": {
     "service_worker": "src/background.ts"
   },
+  "web_accessible_resources": [
+    {
+      "resources": ["icon.png"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "icons": {
-    "128": "openai.png"
+    "128": "icon.png"
   }
 }
