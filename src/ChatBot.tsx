@@ -204,9 +204,14 @@ export const ChatButton = () => {
           transition-all duration-300
           z-50"
         >
-          <div className="flex w-full h-full overflow-y-scroll scrollbar-none">
+          <div className="w-full h-8 flex justify-end items-center text-lg px-2 py-4">
+            <button className="hover:bg-[#303030] px-2 py-1 rounded-lg">
+              X
+            </button>
+          </div>
+          <div className="flex w-full h-full overflow-y-scroll scrollbar-none pt-2">
             {messages.length > 0 ? (
-              <div className="flex flex-col w-full h-full py-4">
+              <div className="flex flex-col w-full h-full">
                 {messages.map((msg, index) => (
                   <div key={index} className="flex flex-col gap-2.5 w-full">
                     {msg.text ? (
