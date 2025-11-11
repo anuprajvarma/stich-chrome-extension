@@ -205,7 +205,10 @@ export const ChatButton = () => {
           z-50"
         >
           <div className="w-full h-8 flex justify-end items-center text-lg px-2 py-4">
-            <button className="hover:bg-[#303030] px-2 py-1 rounded-lg">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="hover:bg-[#303030] px-2 py-1 rounded-lg"
+            >
               X
             </button>
           </div>
