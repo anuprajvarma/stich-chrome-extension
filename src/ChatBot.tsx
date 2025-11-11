@@ -96,10 +96,15 @@ export const ChatButton = () => {
       console.log("Please enter a question.");
       return;
     }
+
     setCopy(false);
+
     const userMsg = { sender: "user", text: question };
     setMessages((prev) => [...prev, userMsg]);
     setQuestion("");
+
+    // 🔹 Add a loading message
+    setMessages((prev) => [...prev, { sender: "bot", text: "Searching..." }]);
 
     try {
       const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -114,15 +119,34 @@ export const ChatButton = () => {
           messages: [
             {
               role: "system",
-              content: `You are a helpful assistant. Respond in long and detail formate and in english`,
+              content: `
+      You are ChatGPT, a helpful and knowledgeable AI assistant.
+      Always respond in fluent, natural English with complete and detailed explanations.
+      Format your response clearly using short paragraphs, bullet points, or examples when useful.
+      Be friendly, professional, and sound like a human.
+      Avoid being robotic or repeating the question.
+    `,
             },
             {
               role: "user",
-              content: `${question}`,
+              content: question,
             },
           ],
         }),
       });
+
+      // 🔸 Handle non-OK status (like 404, 429)
+      if (!res.ok) {
+        const errorText = `API Error: ${res.status} ${res.statusText}`;
+
+        setMessages((prev) => {
+          const updated = [...prev];
+          updated[updated.length - 1] = { sender: "bot", text: errorText };
+          return updated;
+        });
+
+        return;
+      }
 
       if (!res.body) throw new Error("No response body");
 
@@ -130,7 +154,12 @@ export const ChatButton = () => {
       const decoder = new TextDecoder("utf-8");
       let botReply = "";
 
-      setMessages((prev) => [...prev, { sender: "bot", text: "" }]);
+      // 🧠 Replace “Searching...” with an empty bot message
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = { sender: "bot", text: "" };
+        return updated;
+      });
 
       while (true) {
         const { value, done } = await reader.read();
@@ -142,8 +171,6 @@ export const ChatButton = () => {
           .split("\n")
           .filter((line) => line.trim().startsWith("data:"));
 
-        console.log("Stream completed");
-
         for (const line of lines) {
           const jsonStr = line.replace(/^data:\s*/, "");
 
@@ -153,15 +180,12 @@ export const ChatButton = () => {
           }
 
           try {
-            let delta = "";
             const parsed = JSON.parse(jsonStr);
-            if (isTypeExist) {
-              delta = parsed.choices?.[0]?.delta?.reasoning;
-            } else {
-              delta = parsed.choices?.[0]?.delta?.content;
-            }
+            const delta =
+              parsed.choices?.[0]?.delta?.content ||
+              parsed.choices?.[0]?.delta?.reasoning ||
+              "";
 
-            console.log("Parsed chunk:", parsed);
             if (delta) {
               botReply += delta;
               setMessages((prev) => {
@@ -178,6 +202,16 @@ export const ChatButton = () => {
       }
     } catch (error) {
       console.error("Streaming error:", error);
+
+      // ❌ Show readable API error in chat
+      setMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = {
+          sender: "bot",
+          text: "⚠️ API Error: Unable to fetch response. Please try again later.",
+        };
+        return updated;
+      });
     }
   };
 
@@ -216,7 +250,7 @@ export const ChatButton = () => {
               X
             </button>
           </div>
-          <div className="flex w-full h-full overflow-y-scroll scrollbar-none pt-2">
+          <div className="flex w-full h-full overflow-y-scroll scrollbar-none pt-2 gap-2">
             {messages.length > 0 ? (
               <div className="flex flex-col w-full h-full">
                 {messages.map((msg, index) => (
@@ -238,7 +272,7 @@ export const ChatButton = () => {
                           className={`message ${
                             msg.sender === "user"
                               ? "bg-[#303030] rounded-2xl text-[12px] py-2 px-4 w-fit max-w-60"
-                              : "bg-[#303030] px-2.5 py-1.5 rounded-2xl mb-2.5 text-[12px] w-full"
+                              : "px-2.5 py-1.5 rounded-2xl mb-2.5 text-[12px] w-full"
                           }`}
                         >
                           <ReactMarkdown>{msg.text}</ReactMarkdown>
