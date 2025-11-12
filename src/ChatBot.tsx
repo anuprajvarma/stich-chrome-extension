@@ -5,6 +5,7 @@ import "react-tooltip/dist/react-tooltip.css";
 import { GiSpeaker } from "react-icons/gi";
 import { Tooltip } from "react-tooltip";
 import { IoStopCircleOutline } from "react-icons/io5";
+import { FaPlus } from "react-icons/fa6";
 import { BotMessageSquare } from "lucide-react";
 
 const apiKey = import.meta.env.VITE_HUGGINGFACE_API_KEY;
@@ -15,7 +16,7 @@ export const ChatButton = () => {
   const [question, setQuestion] = useState("");
   const [copy, setCopy] = useState(false);
   const [speak, setSpeak] = useState(true);
-  const [isTypeExist, setIsTypeExist] = useState(false);
+  const [isReasoning, setIsReasoning] = useState(false);
   const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
     []
   );
@@ -236,7 +237,7 @@ export const ChatButton = () => {
       {isOpen && (
         <div
           className="flex flex-col fixed bottom-14 left-4 pb-3 px-2
-          rounded-t-2xl w-100 h-11/12
+          rounded-t-xl w-100 h-11/12
            items-center justify-center
           shadow-lg bg-[#212121]
           transition-all duration-300
@@ -245,7 +246,7 @@ export const ChatButton = () => {
           <div className="w-full h-8 flex justify-end items-center text-lg px-2 py-4">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="hover:bg-[#303030] px-2 py-1 rounded-lg"
+              className="hover:bg-[#AFAFAF]/20 text-[#AFAFAF] px-2 py-1 rounded-lg"
             >
               X
             </button>
@@ -363,19 +364,33 @@ export const ChatButton = () => {
               </div>
             )}
           </div>
-          <div className="w-full bg-[#303030] rounded-3xl">
+          <div className="w-full flex gap-2 items-center bg-[#303030] rounded-3xl px-2 relative">
+            <button
+              onClick={() => setIsReasoning(!isReasoning)}
+              className="text-[#AFAFAF] cursor-pointer p-2 rounded-full hover:bg-[#AFAFAF]/20"
+            >
+              <FaPlus size={15} />
+            </button>
+            {isReasoning && (
+              <button
+                onClick={() => setIsReasoning(false)}
+                className="bg-[#353535] hover:bg-[#AFAFAF]/20 absolute left-3 bottom-9 p-2 shadow-xl/30 rounded-xl"
+              >
+                Reasoning
+              </button>
+            )}
             <textarea
               ref={textareaRef}
               onInput={handleInput}
               value={question}
               rows={1}
-              className="w-full border-none outline-none rounded-3xl px-3 py-2 resize-none"
+              className="w-full border-none outline-none rounded-3xl px-1 py-2 resize-none"
               id="myTextarea"
               placeholder="Ask anything"
               onChange={(e) => setQuestion(e.target.value)}
               onKeyDown={(e) => handleKeyDown(e)}
             ></textarea>
-            <div className="flex items-center absolute bottom-2.5 justify-between w-[96%] gap-2 ">
+            {/* <div className="flex items-center absolute bottom-2.5 justify-between w-[96%] gap-2 ">
               <div className="flex">
                 <button
                   className={`${
@@ -388,7 +403,7 @@ export const ChatButton = () => {
                   Reasoning
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       )}
