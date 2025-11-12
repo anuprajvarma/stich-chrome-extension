@@ -151,26 +151,23 @@
 // // 5️⃣ Render React app inside the shadow root
 // createRoot(rootDiv).render(<ChatButton />);
 
-import "./index.css";
+import "@/index.css";
 
 import { createRoot } from "react-dom/client";
-import { StrictMode } from "react";
+// import { StrictMode } from "react";
 import { ChatButton } from "./ChatBot";
 
-const root = document.createElement("div");
-root.id = "__leetcode_ai_whisper_container";
-document.body.append(root);
+const host = document.createElement("div");
+const shadow = host.attachShadow({ mode: "open" });
+document.body.appendChild(host);
 
-createRoot(root).render(
-  <StrictMode>
-    <ChatButton />
-  </StrictMode>
-);
+// 2️⃣ Inject CSS
+const style = document.createElement("link");
+style.rel = "stylesheet";
+style.href = chrome.runtime.getURL("assets/index.css");
+shadow.appendChild(style);
 
-// // Create isolated root
-// const host = document.createElement("div");
-// const shadow = host.attachShadow({ mode: "open" });
-// document.body.appendChild(host);
-// const rootDiv = document.createElement("div");
-// shadow.appendChild(rootDiv);
-// createRoot(rootDiv).render(<ChatButton />);
+// 3️⃣ Create and render root
+const rootDiv = document.createElement("div");
+shadow.appendChild(rootDiv);
+createRoot(rootDiv).render(<ChatButton />);

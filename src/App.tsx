@@ -286,7 +286,7 @@ function App() {
               <div className="stich-div">
                 <img src="icon.png" width={20} height={20} />
               </div>
-              <p className="font-bold text-2xl">Stich</p>
+              <p className="font-bold text-2xl text-red-500">Stich</p>
             </div>
           </div>
           {/* <div>

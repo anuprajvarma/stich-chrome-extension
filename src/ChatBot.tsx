@@ -248,11 +248,11 @@ export const ChatButton = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="
-          fixed bottom-4 left-4
+          fixed bottom-3 left-3
           rounded-lg 
           flex gap-1 items-center justify-center font-semibold
           shadow-lg
-          transition-all duration-300 bg-[#303030] px-4 py-2
+          transition-all duration-300 bg-[#303030] text-white px-4 py-2
           cursor-pointer
           z-[99999]
         "
@@ -263,14 +263,14 @@ export const ChatButton = () => {
 
       {isOpen && (
         <div
-          className="flex flex-col fixed bottom-14 left-4 pb-3 px-2
-          rounded-t-xl w-100 h-11/12
+          className="flex flex-col fixed bottom-14 left-3 pb-3 px-2
+          rounded-t-xl w-[30rem] h-[55rem]
            items-center justify-center
           shadow-lg bg-[#212121]
           transition-all duration-300
           z-[99999]"
         >
-          <div className="w-full h-8 flex justify-end items-center text-lg px-2 py-4">
+          <div className="w-full flex justify-end items-center text-lg px-2 py-4">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="hover:bg-[#AFAFAF]/20 text-[#AFAFAF] px-2 py-1 rounded-lg"
@@ -299,15 +299,15 @@ export const ChatButton = () => {
                           key={index}
                           className={`message ${
                             msg.sender === "user"
-                              ? "bg-[#303030] rounded-2xl text-[12px] py-2 px-4 w-fit max-w-60"
-                              : "px-2.5 py-1.5 rounded-2xl mb-2.5 text-[12px] w-full"
+                              ? "bg-[#303030] text-white rounded-2xl text-[12px] py-2 px-4 w-fit max-w-60"
+                              : "px-2.5 py-1.5 rounded-2xl mb-2.5 text-[12px] w-full text-white"
                           }`}
                         >
                           <ReactMarkdown>{msg.text}</ReactMarkdown>
                         </div>
                       </div>
                     ) : (
-                      <div className="bg-[#303030] px-4 py-2 rounded-2xl text-[12px] w-fit">
+                      <div className="bg-[#303030] text-white px-4 py-2 rounded-2xl text-[12px] w-fit">
                         <p>searching...</p>
                       </div>
                     )}
@@ -386,8 +386,8 @@ export const ChatButton = () => {
                 ))}
               </div>
             ) : (
-              <div className="w-full h-full flex justify-center items-center text-xl font-semibold">
-                <p>What can i help with?</p>
+              <div className="w-full h-full flex justify-center items-center text-xl text-white font-semibold">
+                <p>What can i help with ?</p>
               </div>
             )}
           </div>
@@ -411,7 +411,7 @@ export const ChatButton = () => {
               onInput={handleInput}
               value={question}
               rows={1}
-              className="w-full border-none outline-none rounded-3xl px-1 py-2 resize-none"
+              className="w-full border-none outline-none rounded-3xl px-1 py-2 resize-none text-white bg-[#303030]"
               id="myTextarea"
               placeholder="Ask anything"
               onChange={(e) => setQuestion(e.target.value)}
@@ -425,20 +425,6 @@ export const ChatButton = () => {
                 <IoSendSharp size={15} />
               </button>
             )}
-            {/* <div className="flex items-center absolute bottom-2.5 justify-between w-[96%] gap-2 ">
-              <div className="flex">
-                <button
-                  className={`${
-                    isTypeExist
-                      ? "text-[#1955db] px-3 py-1.5 rounded text-center no-underline inline-block cursor-pointer text-[12px]"
-                      : "border-none px-3 py-1.5 rounded text-center no-underline inline-block cursor-pointer text-[12px]"
-                  }`}
-                  onClick={() => setIsTypeExist(!isTypeExist)}
-                >
-                  Reasoning
-                </button>
-              </div>
-            </div> */}
           </div>
         </div>
       )}

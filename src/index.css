@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .scrollbar-none::-webkit-scrollbar {

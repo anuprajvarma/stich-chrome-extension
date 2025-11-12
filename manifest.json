@@ -15,12 +15,9 @@
       "js": ["src/content.tsx"]
     }
   ],
-  "background": {
-    "service_worker": "src/background.ts"
-  },
   "web_accessible_resources": [
     {
-      "resources": ["icon.png"],
+      "resources": ["assets/*"],
       "matches": ["<all_urls>"]
     }
   ],
