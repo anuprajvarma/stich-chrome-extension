@@ -2,11 +2,10 @@
   "manifest_version": 3,
   "version": "1.0",
   "name": "Stich",
-  "description": "Stop switching tabs to chat with AI; use AI on any site instantly. Write emails & messages, fix grammar mistakes, rephrase text, change writing tone, summarize text, and much more using ChatGPT AI. Works on all sites. Free to use.",
   "action": {
-    "default_popup": "index.html",
     "default_icon": "icon.png"
   },
+  "description": "Stop switching tabs to chat with AI; use AI on any site instantly. Write emails & messages, fix grammar mistakes, rephrase text, change writing tone, summarize text, and much more using ChatGPT AI. Works on all sites. Free to use.",
   "permissions": ["scripting", "activeTab", "storage"],
   "host_permissions": ["<all_urls>"],
   "content_scripts": [
@@ -22,6 +21,8 @@
     }
   ],
   "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
     "128": "icon.png"
   }
 }
