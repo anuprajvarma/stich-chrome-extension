@@ -4,7 +4,7 @@ import { FaRegCopy } from "react-icons/fa6";
 import "react-tooltip/dist/react-tooltip.css";
 import { GiSpeaker } from "react-icons/gi";
 import { Tooltip } from "react-tooltip";
-import { IoStopCircleOutline } from "react-icons/io5";
+import { IoStopCircleOutline, IoSendSharp } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
 import { BotMessageSquare } from "lucide-react";
 
@@ -390,6 +390,14 @@ export const ChatButton = () => {
               onChange={(e) => setQuestion(e.target.value)}
               onKeyDown={(e) => handleKeyDown(e)}
             ></textarea>
+            {question.length > 0 && (
+              <button
+                onClick={handleChat}
+                className="text-[#AFAFAF] cursor-pointer p-2 rounded-full hover:bg-[#AFAFAF]/20"
+              >
+                <IoSendSharp size={15} />
+              </button>
+            )}
             {/* <div className="flex items-center absolute bottom-2.5 justify-between w-[96%] gap-2 ">
               <div className="flex">
                 <button
