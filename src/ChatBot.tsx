@@ -93,6 +93,7 @@ export const ChatButton = () => {
   };
 
   const handleChat = async () => {
+    let res;
     if (question.trim() === "") {
       console.log("Please enter a question.");
       return;
@@ -108,25 +109,23 @@ export const ChatButton = () => {
     setMessages((prev) => [...prev, { sender: "bot", text: "Searching..." }]);
 
     try {
-      const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${apiKey}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "deepseek/deepseek-r1:free",
+          model: "deepseek/deepseek-r1-0528:free",
           stream: true,
           messages: [
             {
               role: "system",
-              content: `
-      You are ChatGPT, a helpful and knowledgeable AI assistant.
-      Always respond in fluent, natural English with complete and detailed explanations.
-      Format your response clearly using short paragraphs, bullet points, or examples when useful.
-      Be friendly, professional, and sound like a human.
-      Avoid being robotic or repeating the question.
-    `,
+              content: ` You are ChatGPT, a helpful and knowledgeable AI assistant.
+        Always reply in fluent English with detailed and natural responses.
+        Use markdown formatting (paragraphs, bullet points, code blocks) for clarity.
+        Be polite, structured, and avoid repeating the user's question.
+            `,
             },
             {
               role: "user",
@@ -138,15 +137,43 @@ export const ChatButton = () => {
 
       // 🔸 Handle non-OK status (like 404, 429)
       if (!res.ok) {
-        const errorText = `API Error: ${res.status} ${res.statusText}`;
-
-        setMessages((prev) => {
-          const updated = [...prev];
-          updated[updated.length - 1] = { sender: "bot", text: errorText };
-          return updated;
+        res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: "tngtech/deepseek-r1t2-chimera:free",
+            stream: true,
+            messages: [
+              {
+                role: "system",
+                content: ` You are ChatGPT, a helpful and knowledgeable AI assistant.
+        Always reply in fluent English with detailed and natural responses.
+        Use markdown formatting (paragraphs, bullet points, code blocks) for clarity.
+        Be polite, structured, and avoid repeating the user's question.
+            `,
+              },
+              {
+                role: "user",
+                content: question,
+              },
+            ],
+          }),
         });
 
-        return;
+        if (!res.ok) {
+          const errorText = `API Error: ${res.status} ${res.statusText}`;
+
+          setMessages((prev) => {
+            const updated = [...prev];
+            updated[updated.length - 1] = { sender: "bot", text: errorText };
+            return updated;
+          });
+
+          return;
+        }
       }
 
       if (!res.body) throw new Error("No response body");
